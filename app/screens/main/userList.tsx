@@ -6,12 +6,23 @@ import { TextField } from "react-native-ui-lib";
 import UserDetails from "@/components/UserDetails";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_USERS } from "@/graphql/queries";
+import LoadingPage from "@/components/LoadingPage";
+import ErrorPage from "@/components/ErrorPage";
 
 const UserList = () => {
-  const { data } = useQuery(GET_ALL_USERS);
+  const { data, loading, error } = useQuery(GET_ALL_USERS);
   const [selectedValue, setSelectedValue] = useState("");
 
   console.log("Usuarios:", data);
+
+  if (loading) {
+    return <LoadingPage />;
+  }
+
+  if (error) {
+    console.error("Error en la consulta: ", error);
+    return <ErrorPage />;
+  }
 
   return (
     <View style={{ height: "100%" }}>

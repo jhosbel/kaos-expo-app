@@ -1,4 +1,12 @@
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React, { useState } from "react";
 import NavBar from "@/components/NavBar";
 import { TextField } from "react-native-ui-lib";
@@ -6,14 +14,41 @@ import { useMutation, useQuery } from "@apollo/client";
 import { GET_ALL_GAMES } from "@/graphql/queries";
 import BigButton from "@/components/BigButton";
 import { CREATE_GAME } from "@/graphql/mutations";
+import LoadingPage from "@/components/LoadingPage";
+import ErrorPage from "@/components/ErrorPage";
+import SmallModalComponent from "@/components/SmallModalComponent";
+import AddImage from "@/components/Icons/AddImage";
+import * as ImagePicker from "expo-image-picker";
 
 const Games = () => {
-  const { data, refetch } = useQuery(GET_ALL_GAMES, {fetchPolicy: "no-cache"});
+  const { data, loading, error, refetch } = useQuery(GET_ALL_GAMES, {
+    fetchPolicy: "no-cache",
+  });
   const [createGame] = useMutation(CREATE_GAME);
   const [formData, setFormData] = useState({
     name: "",
     avatar: "",
   });
+  const [openImg, setOpenImg] = useState(false);
+
+  const pickImage = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      Alert.alert(
+        "Lo siento necesita los permisos de camara para buscar su imagen!"
+      );
+    }
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+    });
+    if (!result.canceled) {
+      const image = result.assets[0].uri;
+      handleInputChange("avatar", image);
+      setOpenImg(false)
+      refetch();
+    }
+  };
 
   const handleInputChange = (key: string, value: any) => {
     setFormData((prev) => ({
@@ -31,20 +66,36 @@ const Games = () => {
       const response = await createGame({
         variables: {
           input: {
-            name: formData.name, // Asegura que sea un número
-            avatar: formData.avatar, // Convierte el número de jugadores a un entero
+            name: formData.name,
+            avatar: formData.avatar,
           },
         },
       });
       console.log("Juego creado: ", response.data);
       await refetch();
+      setFormData({ name: "", avatar: "" });
     } catch (error) {
       console.error("Error al crear el juego: ", error);
     }
   };
 
+  const closeModal = () => {
+    setFormData({name: "", avatar: ""})
+    setOpenImg(false)
+  }
+
   console.log(data);
   console.log(formData);
+
+  if (loading) {
+    return <LoadingPage />;
+  }
+
+  if (error) {
+    console.error("Error en la consulta: ", error);
+    return <ErrorPage />;
+  }
+
   return (
     <View style={{ height: "100%" }}>
       <NavBar />
@@ -83,18 +134,10 @@ const Games = () => {
         </View>
         <View style={{ gap: 10 }}>
           <Text style={{ fontSize: 18 }}>Imagen del juego: </Text>
-          <TextField
-            style={{
-              fontSize: 18,
-              backgroundColor: "#fff",
-              borderWidth: 1,
-              borderRadius: 4,
-              paddingHorizontal: 5,
-            }}
-            keyboardType={"default"}
-            placeholder={"https://imagen.jpg"}
-            value={formData.avatar}
-            onChangeText={(text) => handleInputChange("avatar", text)}
+          <BigButton
+            style={{ backgroundColor: "#39B97C", width: 140 }}
+            children={"Subir images"}
+            onPress={() => setOpenImg(true)}
           />
         </View>
         <View
@@ -104,11 +147,10 @@ const Games = () => {
             paddingHorizontal: 20,
             alignItems: "center",
             marginTop: 20,
-            borderWidth: 1,
             height: 200,
           }}
         >
-          <ScrollView style={{width: 320}}>
+          <ScrollView style={{ width: 320 }}>
             {data?.games
               ? data?.games.map((game: any, i: any) => (
                   <View
@@ -140,6 +182,56 @@ const Games = () => {
           onPress={handleCreateRoom}
         />
       </View>
+      <SmallModalComponent
+        isVisible={openImg}
+        setIsVisible={setOpenImg}
+        containerStyles={{ height: 450 }}
+      >
+        <View
+          style={{ justifyContent: "center", alignItems: "center", gap: 18 }}
+        >
+          <View
+            style={{
+              //flexDirection: "row",
+              justifyContent: "space-around",
+              width: 300,
+              alignItems: "center",
+              marginTop: 15,
+              gap: 15,
+            }}
+          >
+            <TouchableOpacity onPress={pickImage}>
+              <View style={{ alignItems: "center" }}>
+                <Text>Subir imagen desde el movíl</Text>
+                <AddImage />
+              </View>
+            </TouchableOpacity>
+            <Text>Subir imagen con url</Text>
+            <TextField
+              style={{
+                fontSize: 18,
+                backgroundColor: "#fff",
+                borderWidth: 1,
+                borderRadius: 4,
+                paddingHorizontal: 5,
+                width: 300,
+                height: 30
+              }}
+              keyboardType={"default"}
+              placeholder={"https://imagen.jpg"}
+              value={formData.avatar}
+              onChangeText={(text) => handleInputChange("avatar", text)}
+            />
+          </View>
+          <View>
+            <BigButton
+              children={"Cancelar"}
+              onPress={closeModal}
+              style={{ backgroundColor: "#F24643", width: 150 }}
+            />
+          </View>
+        </View>
+      </SmallModalComponent>
     </View>
   );
 };

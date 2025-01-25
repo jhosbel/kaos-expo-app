@@ -11,19 +11,32 @@ import { ASSIGN_GAME_TO_USER } from "@/graphql/mutations";
 import { useAuth } from "@/context/AuthContext";
 import SmallModalComponent from "@/components/SmallModalComponent";
 import AddGameToUser from "@/components/AddGameToUser";
+import LoadingPage from "@/components/LoadingPage";
+import ErrorPage from "@/components/ErrorPage";
 
 const AddGame = () => {
   const { dataUser } = useAuth();
-  const { data: userData, refetch: refetchUserData } = useQuery(
-    GET_USER_BY_EMAIL,
-    {
-      variables: { email: dataUser },
-      fetchPolicy: "no-cache",
-    }
-  );
+  const {
+    data: userData,
+    loading,
+    error,
+    refetch: refetchUserData,
+  } = useQuery(GET_USER_BY_EMAIL, {
+    variables: { email: dataUser },
+    fetchPolicy: "no-cache",
+  });
   const [open, setOpen] = useState(false);
 
-console.log("Usuario", userData)
+  console.log("Usuario", userData);
+
+  if (loading) {
+    return <LoadingPage />;
+  }
+
+  if (error) {
+    console.error("Error en la consulta: ", error);
+    return <ErrorPage />;
+  }
 
   return (
     <View>

@@ -48,7 +48,7 @@ const Settings = () => {
       const result = await response.json();
       setChangePassword(false);
       Alert.alert(result.message);
-      console.log(result); // { message: "Contraseña actualizada correctamente" }
+      console.log(result);
     } catch (error) {
       console.error("Error:", error);
     }

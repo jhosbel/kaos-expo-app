@@ -56,9 +56,9 @@ const MakeRoom = () => {
         hour: "2-digit",
         minute: "2-digit",
         //second: "2-digit",
-        hour12: true, // Formato de 12 horas (AM/PM)
+        hour12: true,
       });
-      setTimeFormat(formattedTime); // Esto actualizará el estado con la hora formateada
+      setTimeFormat(formattedTime);
       handleInputChange("time", formattedTime);
     }
   };
@@ -69,19 +69,18 @@ const MakeRoom = () => {
         variables: {
           input: {
             ...formData,
-            gameId: parseInt(formData.gameId), // Asegura que sea un número
-            playersNum: parseInt(formData.playersNum), // Convierte el número de jugadores a un entero
+            gameId: parseInt(formData.gameId),
+            playersNum: parseInt(formData.playersNum),
           },
         },
       });
       console.log("Sala creada exitosamente: ", response.data);
-      setEndMakeRoom(true); // Muestra el modal de éxito
+      setEndMakeRoom(true);
     } catch (error) {
       console.error("Error al crear la Sala: ", error);
     }
   };
 
-  // Actualiza el estado `formData` dinámicamente
   const handleInputChange = (key: string, value: any) => {
     setFormData((prev) => ({
       ...prev,
@@ -134,16 +133,16 @@ const MakeRoom = () => {
                 (game: any) => game.id === value
               );
               if (selectedGame) {
-                handleInputChange("gameId", value); // ID del juego
-                handleInputChange("gameName", selectedGame.name); // Nombre del juego
+                handleInputChange("gameId", value);
+                handleInputChange("gameName", selectedGame.name);
               }
               setSelectedValue(value);
             }}
             items={
               data?.games
                 ? data.games.map((game: any) => ({
-                    label: game.name, // Aquí usas el nombre del juego como label
-                    value: game.id, // Aquí usas el ID del juego como value
+                    label: game.name,
+                    value: game.id,
                   }))
                 : []
             }
