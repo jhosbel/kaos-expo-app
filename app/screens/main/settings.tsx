@@ -20,27 +20,96 @@ const Settings = () => {
   const [updateUser] = useMutation(UPDATE_USER);
   const [changeEmail, setChangeEmail] = useState(false);
   const [changePassword, setChangePassword] = useState(false);
-  const [changeEmailConfirm, setChangeEmailConfirm] = useState(false);
   const [newEmail, setNewEmail] = useState("");
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [repeatNewPassword, setRepeatNewPassword] = useState("");
 
-  const updateEmail = async () => {
+  const handlePassword = async () => {
+    if (repeatNewPassword != newPassword) {
+      console.log("Contraseñas no coinciden");
+      return;
+    }
+    const url = process.env.EXPO_PUBLIC_BACKEND_URL + "/auth/change-password";
+    const dataChange = {
+      email: data.userByEmail.email,
+      oldPassword: oldPassword,
+      newPassword: newPassword,
+    };
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dataChange),
+      });
+
+      const result = await response.json();
+      setChangePassword(false);
+      Alert.alert(result.message);
+      console.log(result); // { message: "Contraseña actualizada correctamente" }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const handleEmail = async () => {
     try {
       if (!newEmail) {
         Alert.alert("Debe introducir un correo valido");
         return;
       }
       await updateUser({
-        variables: { id: data.userByEmail.id, email: newEmail },
+        variables: {
+          updateUserInput: { id: data.userByEmail.id, email: newEmail },
+        },
       });
       refetch();
       setNewEmail("");
       setChangeEmail(false);
+      Alert.alert("Correo cambiado exitosamente");
     } catch (error) {
       console.error("Error al cambiar el correo: ", error);
     }
+  };
+
+  const UpdateEmail = () => {
+    Alert.alert(
+      "Estas seguro que desea cambiar su correo?",
+      "¿Quieres continuar?",
+      [
+        {
+          text: "Cancelar",
+          onPress: () => setChangeEmail(true),
+          style: "cancel",
+        },
+        {
+          text: "Aceptar",
+          onPress: handleEmail,
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
+  const UpdatePassword = () => {
+    Alert.alert(
+      "Estas seguro que desea cambiar su contraseña?",
+      "¿Quieres continuar?",
+      [
+        {
+          text: "Cancelar",
+          onPress: () => setChangePassword(true),
+          style: "cancel",
+        },
+        {
+          text: "Aceptar",
+          onPress: handlePassword,
+        },
+      ],
+      { cancelable: false }
+    );
   };
 
   return (
@@ -122,7 +191,7 @@ const Settings = () => {
           />
           <View style={{ flexDirection: "row", gap: 20 }}>
             <BigButton
-              //onPress={() => setFinishRecharge(true)}
+              onPress={UpdateEmail}
               style={{ backgroundColor: "#39B97C", width: 140 }}
               children={"Cambiar"}
             />
@@ -201,7 +270,7 @@ const Settings = () => {
           />
           <View style={{ flexDirection: "row", gap: 20 }}>
             <BigButton
-              //onPress={() => setFinishRecharge(true)}
+              onPress={UpdatePassword}
               style={{ backgroundColor: "#39B97C", width: 140 }}
               children={"Cambiar"}
             />
