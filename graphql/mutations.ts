@@ -74,6 +74,21 @@ export const ASSIGN_BANK_TO_USER = gql`
   }
 `;
 
+export const REMOVE_USER_BANK = gql`
+  mutation RemoveUserBank($userId: Int!, $bankId: Int!) {
+    removeUserBank(userId: $userId, bankId: $bankId) {
+      id
+      bankId
+      userId
+      bankName
+      userBankPhone
+      bankCode
+      userDniBank
+      binancePayId
+    }
+  }
+`;
+
 export const UPDATE_USER_STATS = gql`
   mutation UpdateUserStats($roomId: Int!, $stats: [UpdateUserStatsInput!]!) {
     updateUserStats(roomId: $roomId, stats: $stats) {

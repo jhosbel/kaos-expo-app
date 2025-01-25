@@ -1,7 +1,9 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
 import SmallModalComponent from "./SmallModalComponent";
 import BigButton from "./BigButton";
+import { useMutation } from "@apollo/client";
+import { REMOVE_USER_BANK } from "@/graphql/mutations";
 
 const BankInfo = ({
   bankName,
@@ -9,8 +11,48 @@ const BankInfo = ({
   userBankPhone,
   bankCode,
   userDniBank,
+  refetchUserData,
+  userId,
+  bankId,
 }: any) => {
+  const [removeUserBank] = useMutation(REMOVE_USER_BANK);
   const [infoBank, setInfoBank] = useState(false);
+
+  const handleRemoveBank = async () => {
+    try {
+      const response = await removeUserBank({
+        variables: { userId, bankId },
+      });
+      console.log("Bank removed:", response.data.removeUserBank);
+      refetchUserData();
+      setInfoBank(false);
+    } catch (error) {
+      console.error("Error removing bank:", error);
+    }
+  };
+
+  console.log("User ID: ", userId);
+  console.log("Bank: ", bankId);
+
+  const deleteBank = () => {
+    Alert.alert(
+      "Estas seguro que desea eliminar este juego?",
+      "¿Quieres continuar?",
+      [
+        {
+          text: "Cancelar",
+          onPress: () => setInfoBank(true),
+          style: "cancel",
+        },
+        {
+          text: "Aceptar",
+          onPress: handleRemoveBank,
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
   return (
     <>
       <TouchableOpacity
@@ -86,7 +128,7 @@ const BankInfo = ({
           )}
           <View style={{ flexDirection: "row", gap: 20 }}>
             <BigButton
-              //onPress={deleteGame}
+              onPress={deleteBank}
               style={{ backgroundColor: "#39B97C", width: 140 }}
               children={"Eliminar"}
             />

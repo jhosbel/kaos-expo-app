@@ -115,6 +115,13 @@ const AddBankToUser = ({ setOpen, refetchUserData, userEmail }: any) => {
           }}
           placeholder={{ label: "Eliga una opcion...", value: null }}
         />
+        {selectedValue === "1" || selectedValue === "2" ? null : (
+          <BigButton
+            onPress={() => setOpen(false)}
+            style={{ backgroundColor: "#39B97C", width: 150 }}
+            children={"Cancelar"}
+          />
+        )}
         {selectedValue === "1" ? (
           <View
             style={{

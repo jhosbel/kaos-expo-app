@@ -18,8 +18,9 @@ const GameInfo = ({
   gameAvatar,
   gameId,
   gameName,
-  userId,
+  gameUserId,
   userNick,
+  userId,
 }: any) => {
   const [removeUserGame] = useMutation(REMOVE_USER_GAME)
   const [infoGame, setInfoGame] = useState(false);
@@ -99,7 +100,7 @@ const GameInfo = ({
           </View>
           <View style={{ alignItems: "center" }}>
             <Text style={{ color: "#6F6F6F" }}>ID</Text>
-            <Text style={{ color: "#6F6F6F" }}>{truncateText(userId)}</Text>
+            <Text style={{ color: "#6F6F6F" }}>{truncateText(gameUserId)}</Text>
           </View>
           <View style={{ alignItems: "center" }}>
             <Text style={{ color: "#6F6F6F" }}>Nickname</Text>
@@ -126,7 +127,7 @@ const GameInfo = ({
           />
           <Text style={{ color: "#6F6F6F", fontSize: 25 }}>{gameName}</Text>
           <Text style={{ color: "#6F6F6F" }}>ID dentro del juego:</Text>
-          <Text style={{ color: "#6F6F6F" }}>{userId}</Text>
+          <Text style={{ color: "#6F6F6F" }}>{gameUserId}</Text>
           <Text style={{ color: "#6F6F6F" }}>
             Nickname / Nombre dentro del juego:
           </Text>

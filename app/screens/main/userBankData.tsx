@@ -61,6 +61,9 @@ const UserBankData = () => {
                     userBankPhone={bank.userBankPhone}
                     bankCode={bank.bankCode}
                     userDniBank={bank.userDniBank}
+                    refetchUserData={refetchUserData}
+                    userId={userData.userByEmail.id}
+                    bankId={bank.id}
                   />
                 </View>
               ))

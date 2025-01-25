@@ -23,6 +23,8 @@ const AddGame = () => {
   );
   const [open, setOpen] = useState(false);
 
+console.log("Usuario", userData)
+
   return (
     <View>
       <NavBar />
@@ -59,11 +61,12 @@ const AddGame = () => {
                     <View key={i}>
                       <GameInfo
                         gameName={game.gameName}
-                        userId={game.gameUserId}
+                        gameUserId={game.gameUserId}
                         userNick={game.nickname}
                         gameId={game.gameId}
                         gameAvatar={game.gameAvatar}
                         refetch={refetchUserData}
+                        userId={userData?.userByEmail.id}
                       />
                     </View>
                   )

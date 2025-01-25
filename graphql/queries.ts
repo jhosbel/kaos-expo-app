@@ -119,6 +119,7 @@ export const GET_USER_BY_ID = gql`
         gameName
       }
       banks {
+        id
         bankName
         binancePayId
         bankCode
@@ -148,6 +149,7 @@ export const GET_USER_BY_EMAIL = gql`
         gameName
       }
       banks {
+        id
         bankName
         binancePayId
         bankCode
