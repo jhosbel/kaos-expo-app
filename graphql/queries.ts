@@ -82,6 +82,7 @@ export const GET_ALL_USERS = gql`
     users {
       id
       name
+      avatar
       email
       phone
       rol
@@ -105,6 +106,7 @@ export const GET_USER_BY_ID = gql`
     user(id: $id) {
       id
       name
+      avatar
       email
       phone
       rol
@@ -135,6 +137,7 @@ export const GET_USER_BY_EMAIL = gql`
     userByEmail(email: $email) {
       id
       name
+      avatar
       email
       phone
       rol

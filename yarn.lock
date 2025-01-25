@@ -4091,10 +4091,10 @@ expo-image-loader@~5.0.0:
   resolved "https://registry.npmjs.org/expo-image-loader/-/expo-image-loader-5.0.0.tgz"
   integrity sha512-Eg+5FHtyzv3Jjw9dHwu2pWy4xjf8fu3V0Asyy42kO+t/FbvW/vjUixpTjPtgKQLQh+2/9Nk4JjFDV6FwCnF2ZA==
 
-expo-image-picker@~16.0.3:
-  version "16.0.3"
-  resolved "https://registry.npmjs.org/expo-image-picker/-/expo-image-picker-16.0.3.tgz"
-  integrity sha512-c4IOqIQOtx8puWWU4fVsJhuGiAhH6gAIdrVzhimOXSEUHnfxCckRYzvznbd/0cuvaA5y9H0CSYrxpTUc/0WNVw==
+expo-image-picker@~16.0.4:
+  version "16.0.4"
+  resolved "https://registry.npmjs.org/expo-image-picker/-/expo-image-picker-16.0.4.tgz"
+  integrity sha512-LeTdQxL+kS8wiFOf+mTxDZmr0Ok3KwcpvCaDnXwCdCQuszVd4sSml7lg+oaJfkWj793u74M+8j0hQaEDHCgkxg==
   dependencies:
     expo-image-loader "~5.0.0"
 
@@ -6927,10 +6927,10 @@ react-native-picker-select@^9.3.1:
     lodash.isequal "^4.5.0"
     lodash.isobject "^3.0.2"
 
-react-native-reanimated@*, react-native-reanimated@^3.16.3, "react-native-reanimated@>= 2.0.0", react-native-reanimated@>=2.0.0:
-  version "3.16.3"
-  resolved "https://registry.npmjs.org/react-native-reanimated/-/react-native-reanimated-3.16.3.tgz"
-  integrity sha512-OWlA6e1oHhytTpc7WiSZ7Tmb8OYwLKYZz29Sz6d6WAg60Hm5GuAiKIWUG7Ako7FLcYhFkA0pEQ2xPMEYUo9vlw==
+react-native-reanimated@*, react-native-reanimated@^3.16.7, "react-native-reanimated@>= 2.0.0", react-native-reanimated@>=2.0.0:
+  version "3.16.7"
+  resolved "https://registry.npmjs.org/react-native-reanimated/-/react-native-reanimated-3.16.7.tgz"
+  integrity sha512-qoUUQOwE1pHlmQ9cXTJ2MX9FQ9eHllopCLiWOkDkp6CER95ZWeXhJCP4cSm6AD4jigL5jHcZf/SkWrg8ttZUsw==
   dependencies:
     "@babel/plugin-transform-arrow-functions" "^7.0.0-0"
     "@babel/plugin-transform-class-properties" "^7.0.0-0"

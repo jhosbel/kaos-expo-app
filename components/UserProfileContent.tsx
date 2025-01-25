@@ -8,6 +8,8 @@ import {
 import { useAuth } from "@/context/AuthContext";
 import { useQuery } from "@apollo/client";
 import { GET_USER_BY_EMAIL } from "@/graphql/queries";
+import LoadingPage from "./LoadingPage";
+import ErrorPage from "./ErrorPage";
 
 const UserProfileContent = (props: any) => {
   const { dataUser } = useAuth();
@@ -17,7 +19,12 @@ const UserProfileContent = (props: any) => {
   });
 
   if (loading) {
-    return <Text>Cargando...</Text>;
+    return <LoadingPage />;
+  }
+
+  if (error) {
+    console.error("Error en la consulta: ", error);
+    return <ErrorPage />;
   }
 
   return (
@@ -38,7 +45,11 @@ const UserProfileContent = (props: any) => {
           }}
         >
           <Image
-            source={require("../assets/images/Glacius_KI2.png")}
+            source={
+              data && data.userByEmail.avatar !== ""
+                ? { uri: data.userByEmail.avatar }
+                : require("../assets/images/avatar.png")
+            }
             className="rounded-full object-fill"
             style={{
               width: 130,

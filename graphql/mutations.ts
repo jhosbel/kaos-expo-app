@@ -102,6 +102,7 @@ export const UPDATE_USER = gql`
     updateUser(updateUserInput: $updateUserInput) {
       id
       name
+      avatar
       email
       password
       phone

@@ -12,9 +12,11 @@ import CardGame from "@/components/CardGame";
 import { useRouter } from "expo-router";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_GAMES } from "@/graphql/queries";
+import LoadingPage from "@/components/LoadingPage";
+import ErrorPage from "@/components/ErrorPage";
 
 const Main = () => {
-  const { data, refetch } = useQuery(GET_ALL_GAMES, {
+  const { data, loading, error, refetch } = useQuery(GET_ALL_GAMES, {
     fetchPolicy: "no-cache",
   });
   const router = useRouter();
@@ -31,6 +33,15 @@ const Main = () => {
   }, []);
 
   console.log(data);
+
+  if (loading) {
+    return <LoadingPage />;
+  }
+
+  if (error) {
+    console.error("Error en la consulta: ", error);
+    return <ErrorPage />;
+  }
 
   return (
     <View
