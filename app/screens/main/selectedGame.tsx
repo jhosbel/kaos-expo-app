@@ -27,8 +27,8 @@ const SelectedGame = () => {
   const router = useRouter();
 
   useEffect(() => {
-    refetch()
-  }, [])
+    refetch();
+  }, []);
 
   if (data?.rooms) {
     data.rooms.forEach((room: any) => {
@@ -40,7 +40,10 @@ const SelectedGame = () => {
   }
 
   if (loading) return <LoadingPage />;
-  if (error) return <ErrorPage />;
+  if (error) {
+    console.error("Error en la consulta UserList: ", error);
+    <ErrorPage />;
+  }
   if (!data || !data.rooms) return <Text>No rooms available</Text>;
 
   const filteredRooms = data.rooms.filter(

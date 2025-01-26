@@ -1,7 +1,6 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import NavBar from "@/components/NavBar";
-import RNPickerSelect from "react-native-picker-select";
 import { TextField } from "react-native-ui-lib";
 import UserDetails from "@/components/UserDetails";
 import { useQuery } from "@apollo/client";
@@ -13,7 +12,6 @@ const UserList = () => {
   const { data, loading, error, refetch } = useQuery(GET_ALL_USERS, {
     fetchPolicy: 'no-cache'
   });
-  const [selectedValue, setSelectedValue] = useState("");
 
   console.log("Usuarios:", data);
 
@@ -40,20 +38,6 @@ const UserList = () => {
         >
           Lista de usuarios registrados
         </Text>
-        {/* <RNPickerSelect
-          onValueChange={(value) => setSelectedValue(value)}
-          items={[
-            { label: "Call Of Duty Mobile", value: "cofmobile" },
-            { label: "PUBG Mobile", value: "pubgmobile" },
-            { label: "Counter Strike 2", value: "cs2" },
-            { label: "Fortnite", value: "fortnite" },
-          ]}
-          style={{
-            inputAndroid: styles.input,
-            inputIOS: styles.input,
-          }}
-          placeholder={{ label: "Eliga una opcion...", value: null }}
-        /> */}
         <View style={{ flexDirection: "row", gap: 15 }}>
           <Text
             style={{ fontWeight: "semibold", fontSize: 15, color: "#6F6F6F" }}
@@ -126,6 +110,7 @@ const UserList = () => {
                     crdBalance={user.crdBalance}
                     usdBalance={user.usdBalance}
                     userId={user.id}
+                    rol={user.rol}
                     refetchUsers={refetch}
                   />
                 </View>

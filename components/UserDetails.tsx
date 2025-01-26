@@ -2,19 +2,26 @@ import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
 import { TextField } from "react-native-ui-lib";
 import SmallModalComponent from "./SmallModalComponent";
+import RNPickerSelect from "react-native-picker-select";
 import BigButton from "./BigButton";
 import { useMutation } from "@apollo/client";
-import { REMOVE_USER } from "@/graphql/mutations";
+import { REMOVE_USER, UPDATE_USER_ROLE } from "@/graphql/mutations";
 
-const UserDetails = ({ name, usdBalance, crdBalance, userId, refetchUsers }: any) => {
+const UserDetails = ({
+  name,
+  usdBalance,
+  crdBalance,
+  userId,
+  refetchUsers,
+  rol,
+}: any) => {
   const [removeUser] = useMutation(REMOVE_USER);
+  const [updateUserRole] = useMutation(UPDATE_USER_ROLE);
   const [showUser, setShowUser] = useState(false);
   const [banear, setBanear] = useState(false);
-  const [confirmBan, setConfirmBan] = useState(false);
-  const [finishBan, setFinishBan] = useState(false);
   const [deleteUser, setDeleteUser] = useState(false);
-  const [confirmDelete, setConfirmDelete] = useState(false);
-  const [finishDelete, setFinishDelete] = useState(false);
+  const [changeRol, setChangeRol] = useState(false);
+  const [selectedValue, setSelectedValue] = useState("");
 
   const deleteAlert = () => {
     Alert.alert(
@@ -40,11 +47,34 @@ const UserDetails = ({ name, usdBalance, crdBalance, userId, refetchUsers }: any
       await removeUser({
         variables: { id: userId },
       });
-      Alert.alert('Usuario eliminado correctamente')
+      Alert.alert("Usuario eliminado correctamente");
       setDeleteUser(false);
-      refetchUsers()
+      refetchUsers();
     } catch (error) {
       console.error("Error al borrar el usuario:", error);
+    }
+  };
+
+  const handleUpdateRole = async () => {
+    if (!userId) {
+      Alert.alert(
+        "Error",
+        "Por favor, ingresa el ID del usuario y el nuevo rol"
+      );
+      return;
+    }
+    try {
+      await updateUserRole({
+        variables: {
+          id: userId,
+          newRole: selectedValue,
+        },
+      });
+      refetchUsers();
+      setChangeRol(false);
+      Alert.alert(`Rol de usuario cambiado exitosamente por ${selectedValue}`);
+    } catch (error) {
+      console.error("Error al cambiar el rol del usuario:", error);
     }
   };
 
@@ -106,6 +136,19 @@ const UserDetails = ({ name, usdBalance, crdBalance, userId, refetchUsers }: any
               <Text style={{ color: "#fff", fontSize: 18 }}>Banear</Text>
             </TouchableOpacity>
             <TouchableOpacity
+              onPress={() => setChangeRol(true)}
+              style={{
+                width: 100,
+                height: 35,
+                backgroundColor: "#F15C26",
+                borderRadius: 5,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text style={{ color: "#fff", fontSize: 18 }}>Cambiar rol</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
               onPress={deleteAlert}
               style={{
                 width: 100,
@@ -121,7 +164,7 @@ const UserDetails = ({ name, usdBalance, crdBalance, userId, refetchUsers }: any
           </View>
           <BigButton
             onPress={() => setShowUser(false)}
-            style={{ backgroundColor: "#F24643" }}
+            style={{ backgroundColor: "#F15C26" }}
             children={"Volver"}
           />
         </View>
@@ -175,7 +218,7 @@ const UserDetails = ({ name, usdBalance, crdBalance, userId, refetchUsers }: any
             }}
           >
             <BigButton
-              onPress={() => setConfirmBan(true)}
+              //onPress={() => setConfirmBan(true)}
               style={{ backgroundColor: "#39B97C", width: 140 }}
               children={"Continuar"}
             />
@@ -189,101 +232,8 @@ const UserDetails = ({ name, usdBalance, crdBalance, userId, refetchUsers }: any
       </SmallModalComponent>
       <SmallModalComponent
         containerStyles={{ height: 280 }}
-        isVisible={confirmBan}
-        setIsVisible={setConfirmBan}
-      >
-        <View
-          style={{ justifyContent: "center", alignItems: "center", gap: 10 }}
-        >
-          <Text
-            style={{
-              color: "#6F6F6F",
-              fontSize: 30,
-              fontWeight: "semibold",
-              marginTop: 20,
-              textAlign: "center",
-              width: 300,
-            }}
-          >
-            Seguro que desea banear este usuario?
-          </Text>
-          <Text style={{ fontSize: 20, color: "#6F6F6F" }}>GlaciusTwo.</Text>
-          <View style={{ flexDirection: "row", width: 350 }}>
-            <Text style={{ fontSize: 20, color: "#6F6F6F" }}>
-              ID del usuario:
-            </Text>
-            <Text style={{ fontSize: 20, color: "#6F6F6F" }}>
-              {"7520453512485314138451354853"}
-            </Text>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-around",
-              width: 350,
-            }}
-          >
-            <BigButton
-              onPress={() => setFinishBan(true)}
-              style={{ backgroundColor: "#39B97C", width: 140 }}
-              children={"Banear"}
-            />
-            <BigButton
-              onPress={() => setConfirmBan(false)}
-              style={{ backgroundColor: "#F24643", width: 140 }}
-              children={"Cancelar"}
-            />
-          </View>
-        </View>
-      </SmallModalComponent>
-      <SmallModalComponent
-        containerStyles={{ height: 280 }}
-        isVisible={finishBan}
-        setIsVisible={setFinishBan}
-      >
-        <View
-          style={{ justifyContent: "center", alignItems: "center", gap: 10 }}
-        >
-          <Text
-            style={{
-              color: "#6F6F6F",
-              fontSize: 30,
-              fontWeight: "semibold",
-              marginTop: 20,
-              textAlign: "center",
-              width: 300,
-            }}
-          >
-            Usuario baneado con exito
-          </Text>
-          <Text style={{ fontSize: 20, color: "#6F6F6F" }}>GlaciusTwo.</Text>
-          <View style={{ flexDirection: "row", width: 350 }}>
-            <Text style={{ fontSize: 20, color: "#6F6F6F" }}>
-              ID del usuario:
-            </Text>
-            <Text style={{ fontSize: 20, color: "#6F6F6F" }}>
-              {"7520453512485314138451354853"}
-            </Text>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-around",
-              width: 350,
-            }}
-          >
-            <BigButton
-              onPress={() => setFinishBan(false)}
-              style={{ backgroundColor: "#39B97C", width: 140 }}
-              children={"Finalizar"}
-            />
-          </View>
-        </View>
-      </SmallModalComponent>
-      <SmallModalComponent
-        containerStyles={{ height: 280 }}
-        isVisible={deleteUser}
-        setIsVisible={setDeleteUser}
+        isVisible={changeRol}
+        setIsVisible={setChangeRol}
       >
         <View
           style={{ justifyContent: "center", alignItems: "center", gap: 10 }}
@@ -299,28 +249,34 @@ const UserDetails = ({ name, usdBalance, crdBalance, userId, refetchUsers }: any
             Eliminar usuario
           </Text>
 
-          <View style={{ flexDirection: "row", width: 350, gap: 10 }}>
-            <Text style={{ fontSize: 20, color: "6F6F6F" }}>
-              ID del usuario:
-            </Text>
-            <Text style={{ fontSize: 20, color: "6F6F6F" }}>
-              {"7520453512485314138451354853"}
-            </Text>
+          <View style={{ width: 350, gap: 10 }}>
+            <RNPickerSelect
+              onValueChange={(value) => setSelectedValue(value)}
+              items={[
+                { label: "Usuario", value: "USER" },
+                { label: "Moderador", value: "MODERATOR" },
+                { label: "Administrador", value: "ADMIN" },
+              ]}
+              style={{
+                inputAndroid: styles.input,
+                inputIOS: styles.input,
+              }}
+              placeholder={{ label: "Eliga una opcion...", value: null }}
+            />
           </View>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
             <Text style={{ fontSize: 20, color: "6F6F6F" }}>
-              Ingrese el ID:
+              Tipo de usuario:
             </Text>
-            <TextField
-              placeholder={"86513518123135135"}
-              style={{
-                backgroundColor: "#fff",
-                borderWidth: 1,
-                borderRadius: 4,
-                fontSize: 20,
-                paddingHorizontal: 5,
-              }}
-            />
+            <Text style={{ fontSize: 20 }}>
+              {rol === "USER"
+                ? "Usuario"
+                : rol === "ADMIN"
+                ? "Administrador"
+                : rol === "MODERATOR"
+                ? "Moderador"
+                : ""}
+            </Text>
           </View>
           <View
             style={{
@@ -330,107 +286,14 @@ const UserDetails = ({ name, usdBalance, crdBalance, userId, refetchUsers }: any
             }}
           >
             <BigButton
-              onPress={() => setConfirmDelete(true)}
+              onPress={handleUpdateRole}
               style={{ backgroundColor: "#39B97C", width: 140 }}
               children={"Continuar"}
             />
             <BigButton
-              onPress={() => setDeleteUser(false)}
+              onPress={() => setChangeRol(false)}
               style={{ backgroundColor: "#F24643", width: 140 }}
               children={"Cancelar"}
-            />
-          </View>
-        </View>
-      </SmallModalComponent>
-      <SmallModalComponent
-        containerStyles={{ height: 280 }}
-        isVisible={confirmDelete}
-        setIsVisible={setConfirmDelete}
-      >
-        <View
-          style={{ justifyContent: "center", alignItems: "center", gap: 10 }}
-        >
-          <Text
-            style={{
-              color: "#6F6F6F",
-              fontSize: 30,
-              fontWeight: "semibold",
-              marginTop: 20,
-              textAlign: "center",
-              width: 300,
-            }}
-          >
-            Seguro que desea eliminar este usuario?
-          </Text>
-          <Text style={{ fontSize: 20, color: "#6F6F6F" }}>GlaciusTwo.</Text>
-          <View style={{ flexDirection: "row", width: 350 }}>
-            <Text style={{ fontSize: 20, color: "#6F6F6F" }}>
-              ID del usuario:
-            </Text>
-            <Text style={{ fontSize: 20, color: "#6F6F6F" }}>
-              {"7520453512485314138451354853"}
-            </Text>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-around",
-              width: 350,
-            }}
-          >
-            <BigButton
-              onPress={() => setFinishDelete(true)}
-              style={{ backgroundColor: "#39B97C", width: 140 }}
-              children={"Eliminar"}
-            />
-            <BigButton
-              onPress={() => setConfirmDelete(false)}
-              style={{ backgroundColor: "#F24643", width: 140 }}
-              children={"Cancelar"}
-            />
-          </View>
-        </View>
-      </SmallModalComponent>
-      <SmallModalComponent
-        containerStyles={{ height: 280 }}
-        isVisible={finishDelete}
-        setIsVisible={setFinishDelete}
-      >
-        <View
-          style={{ justifyContent: "center", alignItems: "center", gap: 10 }}
-        >
-          <Text
-            style={{
-              color: "#6F6F6F",
-              fontSize: 30,
-              fontWeight: "semibold",
-              marginTop: 20,
-              textAlign: "center",
-              width: 300,
-            }}
-          >
-            Usuario eliminado con exito
-          </Text>
-          <Text style={{ fontSize: 20, color: "#6F6F6F" }}>GlaciusTwo.</Text>
-          <View style={{ flexDirection: "row", width: 350 }}>
-            <Text style={{ fontSize: 20, color: "#6F6F6F" }}>
-              ID del usuario:
-            </Text>
-            <Text style={{ fontSize: 20, color: "#6F6F6F" }}>
-              {"7520453512485314138451354853"}
-            </Text>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-around",
-              width: 350,
-            }}
-          >
-            <BigButton
-              onPress={() => setFinishDelete(false)}
-              style={{ backgroundColor: "#39B97C", width: 140 }}
-              children={"Finalizar"}
             />
           </View>
         </View>
@@ -441,4 +304,14 @@ const UserDetails = ({ name, usdBalance, crdBalance, userId, refetchUsers }: any
 
 export default UserDetails;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  input: {
+    fontSize: 16,
+    borderColor: "#ddd",
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 10,
+    width: "100%",
+    backgroundColor: "#f9f9f9",
+  },
+});

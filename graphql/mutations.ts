@@ -113,6 +113,16 @@ export const UPDATE_USER = gql`
   }
 `;
 
+export const UPDATE_USER_ROLE = gql`
+  mutation UpdateUserRole($id: Int!, $newRole: String!) {
+    updateUserRole(id: $id, newRole: $newRole) {
+      id
+      name
+      rol
+    }
+  }
+`;
+
 export const REMOVE_USER = gql`
   mutation RemoveUser($id: Int!) {
     removeUser(id: $id) {
