@@ -53,7 +53,7 @@ const UserBankData = () => {
         />
         <ScrollView style={{ height: 330 }}>
           {userData?.userByEmail
-            ? userData.userByEmail.banks.map((bank: any, i: any) => (
+            ? userData?.userByEmail?.banks.map((bank: any, i: any) => (
                 <View key={i}>
                   <BankInfo
                     bankName={bank.bankName}
@@ -62,7 +62,7 @@ const UserBankData = () => {
                     bankCode={bank.bankCode}
                     userDniBank={bank.userDniBank}
                     refetchUserData={refetchUserData}
-                    userId={userData.userByEmail.id}
+                    userId={userData?.userByEmail?.id}
                     bankId={bank.id}
                   />
                 </View>

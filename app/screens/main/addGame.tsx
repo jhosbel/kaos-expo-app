@@ -69,7 +69,7 @@ const AddGame = () => {
           </View>
           <ScrollView style={{ height: 330 }}>
             {userData?.userByEmail
-              ? userData.userByEmail.userGameDetails.map(
+              ? userData?.userByEmail?.userGameDetails.map(
                   (game: any, i: any) => (
                     <View key={i}>
                       <GameInfo
@@ -79,7 +79,7 @@ const AddGame = () => {
                         gameId={game.gameId}
                         gameAvatar={game.gameAvatar}
                         refetch={refetchUserData}
-                        userId={userData?.userByEmail.id}
+                        userId={userData?.userByEmail?.id}
                       />
                     </View>
                   )

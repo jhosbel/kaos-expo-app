@@ -11,6 +11,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useQuery } from "@apollo/client";
 import { GET_USER_BY_EMAIL } from "@/graphql/queries";
 import LoadingPage from "@/components/LoadingPage";
+import ErrorPage from "@/components/ErrorPage";
 
 const Layout = () => {
   const { dataUser } = useAuth();
@@ -20,22 +21,13 @@ const Layout = () => {
   });
 
   if (loading) {
-    return (
-      <View
-        style={{
-          height: "100%",
-          alignItems: "center",
-          backgroundColor: "#F8F8F8",
-          flex: 1,
-          gap: 25,
-        }}
-      >
-        <LoadingPage />
-      </View>
-    );
+    return <LoadingPage />
   }
 
-  console.log("Datos: ", data.userByEmail.rol);
+  if (error) {
+    console.error("Error en la consulta Layout: ", error);
+    return <ErrorPage />;
+  }
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -173,8 +165,8 @@ const Layout = () => {
           options={{
             drawerLabel: () => (
               <>
-                {data.userByEmail.rol === "MODERATOR" ||
-                data.userByEmail.rol === "ADMIN" ? (
+                {data?.userByEmail?.rol === "MODERATOR" ||
+                data?.userByEmail?.rol === "ADMIN" ? (
                   <View style={{ flexDirection: "row" }}>
                     <ModeratorIcon width={25} height={25} />
                     <Text
@@ -227,7 +219,7 @@ const Layout = () => {
                     color: "#F15C26",
                     alignSelf: "center",
                   }}
-                >{`Crd. ${data.userByEmail.crdBalance}`}</Text>
+                >{`Crd. ${data?.userByEmail?.crdBalance}`}</Text>
                 <Text
                   style={{
                     fontSize: 20,
@@ -245,7 +237,7 @@ const Layout = () => {
                     color: "#39B97C",
                     alignSelf: "center",
                   }}
-                >{`$${data.userByEmail.usdBalance}`}</Text>
+                >{`$${data?.userByEmail?.usdBalance}`}</Text>
               </>
             ),
             drawerItemStyle: {

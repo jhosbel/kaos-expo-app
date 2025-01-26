@@ -23,7 +23,7 @@ const UserProfileContent = (props: any) => {
   }
 
   if (error) {
-    console.error("Error en la consulta: ", error);
+    console.error("Error en la consulta UserProfile: ", error);
     return <ErrorPage />;
   }
 
@@ -46,8 +46,8 @@ const UserProfileContent = (props: any) => {
         >
           <Image
             source={
-              data && data.userByEmail.avatar !== ""
-                ? { uri: data.userByEmail.avatar }
+              data && data?.userByEmail?.avatar !== ""
+                ? { uri: data?.userByEmail?.avatar }
                 : require("../assets/images/avatar.png")
             }
             className="rounded-full object-fill"
@@ -58,7 +58,7 @@ const UserProfileContent = (props: any) => {
             }}
           />
           <Text style={{ fontSize: 20, color: "#fff" }}>
-            {data.userByEmail.name}
+            {data?.userByEmail?.name}
           </Text>
         </View>
         <View style={{ height: 500 }}>

@@ -112,3 +112,13 @@ export const UPDATE_USER = gql`
     }
   }
 `;
+
+export const REMOVE_USER = gql`
+  mutation RemoveUser($id: Int!) {
+    removeUser(id: $id) {
+      id
+      name
+      email
+    }
+  }
+`;

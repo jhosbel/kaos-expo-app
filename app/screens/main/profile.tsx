@@ -40,14 +40,14 @@ const Profile = () => {
       );
     }
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: 'images',
       quality: 1,
     });
     if (!result.canceled) {
       const image = result.assets[0].uri;
       await updateUser({
         variables: {
-          updateUserInput: { id: data.userByEmail.id, avatar: image },
+          updateUserInput: { id: data?.userByEmail?.id, avatar: image },
         },
       });
       refetch();
@@ -61,14 +61,14 @@ const Profile = () => {
       return;
     }
     let result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: 'images',
       quality: 1,
     });
     if (!result.canceled) {
       const image = result.assets[0].uri;
       await updateUser({
         variables: {
-          updateUserInput: { id: data.userByEmail.id, avatar: image },
+          updateUserInput: { id: data?.userByEmail?.id, avatar: image },
         },
       });
       refetch();
@@ -78,7 +78,7 @@ const Profile = () => {
   const updateName = async () => {
     await updateUser({
       variables: {
-        updateUserInput: { id: data.userByEmail.id, name: userName },
+        updateUserInput: { id: data?.userByEmail?.id, name: userName },
       },
     });
     refetch();
@@ -101,8 +101,8 @@ const Profile = () => {
       <View style={{ height: "100%", alignItems: "center" }}>
         <Image
           source={
-            data && data.userByEmail.avatar !== ""
-              ? { uri: data.userByEmail.avatar }
+            data && data?.userByEmail?.avatar !== ""
+              ? { uri: data?.userByEmail?.avatar }
               : require("../../../assets/images/avatar.png")
           }
           className="rounded-full object-fill"
@@ -122,7 +122,7 @@ const Profile = () => {
             marginBottom: 25,
           }}
         >
-          {data.userByEmail.name}
+          {data?.userByEmail?.name}
         </Text>
         <View style={{ gap: 25 }}>
           <BigButton

@@ -7,8 +7,10 @@ import { Colors, TextField } from "react-native-ui-lib";
 import { Ionicons } from "@expo/vector-icons";
 import BigButton from "@/components/BigButton";
 import { useRouter } from "expo-router";
+import { useAuth } from "@/context/AuthContext";
 
 const register = () => {
+  const {setDataUser, setToken} = useAuth()
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(true);
   const [showPassword2, setShowPassword2] = useState(true);
@@ -60,6 +62,8 @@ const register = () => {
       console.log("Datos del registro: ", data);
       if (data) {
         Alert.alert("Registro exitoso", `Bienvenido ${username}`);
+        setDataUser(data.email)
+        setToken(data.token)
         router.navigate("/screens/main/main"); // Redirigir a la pantalla principal
       } else if (data.status === "FIELD_ERROR") {
         Alert.alert("Error", "Revisa los campos del formulario.");

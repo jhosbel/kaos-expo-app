@@ -39,7 +39,7 @@ const Games = () => {
       );
     }
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: 'images',
       quality: 1,
     });
     if (!result.canceled) {

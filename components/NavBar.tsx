@@ -6,6 +6,8 @@ import MenuIcon from "./Icons/MenuIcon";
 import { useAuth } from "@/context/AuthContext";
 import { useQuery } from "@apollo/client";
 import { GET_USER_BY_EMAIL } from "@/graphql/queries";
+import LoadingPage from "./LoadingPage";
+import ErrorPage from "./ErrorPage";
 
 const NavBar = () => {
   const { dataUser } = useAuth();
@@ -16,7 +18,12 @@ const NavBar = () => {
   const navigation = useNavigation();
 
   if (loading) {
-    return <Text>Cargando...</Text>;
+    return <LoadingPage />;
+  }
+
+  if (error) {
+    console.error("Error en la consulta NavBar: ", error);
+    return <ErrorPage />;
   }
 
   return (
@@ -62,13 +69,13 @@ const NavBar = () => {
             {`Crd. disponibles: `}
             <Text
               style={{ color: "#F15C26" }}
-            >{`${data.userByEmail.crdBalance}`}</Text>
+            >{`${data?.userByEmail?.crdBalance}`}</Text>
           </Text>
           <Text style={{ textAlign: "center" }}>
             {`Saldo de retiro: `}
             <Text
               style={{ color: "#39B97C" }}
-            >{`$${data.userByEmail.usdBalance}`}</Text>
+            >{`$${data?.userByEmail?.usdBalance}`}</Text>
           </Text>
         </View>
         <KaosLogo width={38} height={48} />

@@ -5,7 +5,7 @@ import NavBar from "./NavBar";
 const ErrorPage = () => {
   return (
     <View>
-      <NavBar />
+      {/* <NavBar /> */}
       <View
         style={{ height: 650, justifyContent: "center", alignItems: "center" }}
       >

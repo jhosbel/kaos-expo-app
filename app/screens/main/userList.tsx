@@ -10,7 +10,9 @@ import LoadingPage from "@/components/LoadingPage";
 import ErrorPage from "@/components/ErrorPage";
 
 const UserList = () => {
-  const { data, loading, error } = useQuery(GET_ALL_USERS);
+  const { data, loading, error, refetch } = useQuery(GET_ALL_USERS, {
+    fetchPolicy: 'no-cache'
+  });
   const [selectedValue, setSelectedValue] = useState("");
 
   console.log("Usuarios:", data);
@@ -20,7 +22,7 @@ const UserList = () => {
   }
 
   if (error) {
-    console.error("Error en la consulta: ", error);
+    console.error("Error en la consulta UserList: ", error);
     return <ErrorPage />;
   }
 
@@ -38,7 +40,7 @@ const UserList = () => {
         >
           Lista de usuarios registrados
         </Text>
-        <RNPickerSelect
+        {/* <RNPickerSelect
           onValueChange={(value) => setSelectedValue(value)}
           items={[
             { label: "Call Of Duty Mobile", value: "cofmobile" },
@@ -51,7 +53,7 @@ const UserList = () => {
             inputIOS: styles.input,
           }}
           placeholder={{ label: "Eliga una opcion...", value: null }}
-        />
+        /> */}
         <View style={{ flexDirection: "row", gap: 15 }}>
           <Text
             style={{ fontWeight: "semibold", fontSize: 15, color: "#6F6F6F" }}
@@ -124,6 +126,7 @@ const UserList = () => {
                     crdBalance={user.crdBalance}
                     usdBalance={user.usdBalance}
                     userId={user.id}
+                    refetchUsers={refetch}
                   />
                 </View>
               );

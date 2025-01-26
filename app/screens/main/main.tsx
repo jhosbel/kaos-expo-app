@@ -39,7 +39,7 @@ const Main = () => {
   }
 
   if (error) {
-    console.error("Error en la consulta: ", error);
+    console.error("Error en la consulta Main: ", error);
     return <ErrorPage />;
   }
 

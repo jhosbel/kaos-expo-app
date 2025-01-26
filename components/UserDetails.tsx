@@ -1,10 +1,13 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
 import { TextField } from "react-native-ui-lib";
 import SmallModalComponent from "./SmallModalComponent";
 import BigButton from "./BigButton";
+import { useMutation } from "@apollo/client";
+import { REMOVE_USER } from "@/graphql/mutations";
 
-const UserDetails = ({ name, usdBalance, crdBalance, userId }: any) => {
+const UserDetails = ({ name, usdBalance, crdBalance, userId, refetchUsers }: any) => {
+  const [removeUser] = useMutation(REMOVE_USER);
   const [showUser, setShowUser] = useState(false);
   const [banear, setBanear] = useState(false);
   const [confirmBan, setConfirmBan] = useState(false);
@@ -12,6 +15,38 @@ const UserDetails = ({ name, usdBalance, crdBalance, userId }: any) => {
   const [deleteUser, setDeleteUser] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [finishDelete, setFinishDelete] = useState(false);
+
+  const deleteAlert = () => {
+    Alert.alert(
+      "Estas seguro que desea retirar?",
+      "¿Quieres continuar?",
+      [
+        {
+          text: "Cancelar",
+          onPress: () => setDeleteUser(false),
+          style: "cancel",
+        },
+        {
+          text: "Aceptar",
+          onPress: removeUserFunction,
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
+  const removeUserFunction = async () => {
+    try {
+      await removeUser({
+        variables: { id: userId },
+      });
+      Alert.alert('Usuario eliminado correctamente')
+      setDeleteUser(false);
+      refetchUsers()
+    } catch (error) {
+      console.error("Error al borrar el usuario:", error);
+    }
+  };
 
   return (
     <View>
@@ -41,12 +76,21 @@ const UserDetails = ({ name, usdBalance, crdBalance, userId }: any) => {
         setIsVisible={setShowUser}
       >
         <View
-          style={{ justifyContent: "center", alignItems: "center", gap: 10, padding: 10 }}
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            gap: 10,
+            padding: 10,
+          }}
         >
           <Text style={{ fontSize: 20 }}>ID del usuario: {userId}</Text>
           <Text style={{ fontSize: 20 }}>{name}</Text>
-          <Text style={{ fontSize: 20 }}>Saldo USD: <Text style={{ color: "#39B97C" }}>${usdBalance}</Text></Text>
-          <Text style={{ fontSize: 20 }}>Saldo Crd: <Text style={{ color: "#F15C26" }}>{crdBalance}</Text></Text>
+          <Text style={{ fontSize: 20 }}>
+            Saldo USD: <Text style={{ color: "#39B97C" }}>${usdBalance}</Text>
+          </Text>
+          <Text style={{ fontSize: 20 }}>
+            Saldo Crd: <Text style={{ color: "#F15C26" }}>{crdBalance}</Text>
+          </Text>
           <View style={{ flexDirection: "row", gap: 25 }}>
             <TouchableOpacity
               onPress={() => setBanear(true)}
@@ -62,7 +106,7 @@ const UserDetails = ({ name, usdBalance, crdBalance, userId }: any) => {
               <Text style={{ color: "#fff", fontSize: 18 }}>Banear</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => setDeleteUser(true)}
+              onPress={deleteAlert}
               style={{
                 width: 100,
                 height: 35,

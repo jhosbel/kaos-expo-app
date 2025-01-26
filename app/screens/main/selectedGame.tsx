@@ -15,6 +15,8 @@ import { useRouter } from "expo-router";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_ROOMS } from "@/graphql/queries";
 import { useLocalSearchParams } from "expo-router";
+import LoadingPage from "@/components/LoadingPage";
+import ErrorPage from "@/components/ErrorPage";
 
 const SelectedGame = () => {
   const { name, avatar }: any = useLocalSearchParams();
@@ -37,8 +39,8 @@ const SelectedGame = () => {
     });
   }
 
-  if (loading) return <Text>Loading...</Text>;
-  if (error) return <Text>Error: {error.message}</Text>;
+  if (loading) return <LoadingPage />;
+  if (error) return <ErrorPage />;
   if (!data || !data.rooms) return <Text>No rooms available</Text>;
 
   const filteredRooms = data.rooms.filter(

@@ -32,7 +32,7 @@ const Settings = () => {
     }
     const url = process.env.EXPO_PUBLIC_BACKEND_URL + "/auth/change-password";
     const dataChange = {
-      email: data.userByEmail.email,
+      email: data?.userByEmail?.email,
       oldPassword: oldPassword,
       newPassword: newPassword,
     };
@@ -62,7 +62,7 @@ const Settings = () => {
       }
       await updateUser({
         variables: {
-          updateUserInput: { id: data.userByEmail.id, email: newEmail },
+          updateUserInput: { id: data?.userByEmail?.id, email: newEmail },
         },
       });
       refetch();

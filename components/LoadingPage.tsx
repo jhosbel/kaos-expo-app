@@ -36,7 +36,7 @@ const LoadingPage = () => {
 
   return (
     <View>
-      <NavBar />
+      {/* <NavBar /> */}
       <View
         style={{ height: 650, justifyContent: "center", alignItems: "center" }}
       >

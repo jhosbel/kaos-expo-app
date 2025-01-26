@@ -62,6 +62,9 @@ const BanksPage = () => {
             borderWidth: 1,
             padding: 10,
             borderRadius: 5,
+            width: 250,
+            height: 40,
+            fontSize: 15
           }}
           placeholder={"Bancolombia"}
           keyboardType={"default"}
@@ -84,7 +87,7 @@ const BanksPage = () => {
           {dataAllBanks?.banks
             ? dataAllBanks?.banks?.map((bank: any, i: any) => (
                 <View key={i}>
-                  <Text>{bank.name}</Text>
+                  <Text style={{fontSize: 25, fontWeight: "bold"}}>{bank.name}</Text>
                 </View>
               ))
             : []}
