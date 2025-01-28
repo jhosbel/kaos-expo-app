@@ -143,3 +143,15 @@ export const CONVERT_CRD_TO_USD = gql`
     }
   }
 `;
+
+export const CREATE_USER_DEPOSIT = gql`
+  mutation CreateUserDeposit($createUserDepositInput: CreateUserDepositInput!) {
+    createUserDeposit(createUserDepositInput: $createUserDepositInput) {
+      id
+      deposit
+      depositImage
+      userId
+      rol
+    }
+  }
+`;
