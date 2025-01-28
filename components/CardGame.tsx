@@ -1,14 +1,17 @@
 import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-const CardGame = ({onPress, cardImage, gameName, cardStyles}: any) => {
+const CardGame = ({ onPress, cardImage, gameName, cardStyles }: any) => {
   return (
     <TouchableOpacity
-      style={[cardStyles, {
-        borderRadius: 17,
-        elevation: 10,
-        backgroundColor: "#DFDFDF",
-      }]}
+      style={[
+        cardStyles,
+        {
+          borderRadius: 17,
+          elevation: 10,
+          backgroundColor: "#DFDFDF",
+        },
+      ]}
       onPress={onPress}
     >
       <View

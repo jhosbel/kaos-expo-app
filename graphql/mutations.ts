@@ -132,3 +132,14 @@ export const REMOVE_USER = gql`
     }
   }
 `;
+
+export const CONVERT_CRD_TO_USD = gql`
+  mutation ConvertCrdToUsd($id: Int!, $amount: Int!) {
+    convertCrdToUsd(id: $id, amount: $amount) {
+      id
+      name
+      crdBalance
+      usdBalance
+    }
+  }
+`;

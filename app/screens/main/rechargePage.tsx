@@ -27,16 +27,15 @@ const RechargePage = () => {
       return;
     }
 
-    // Abre la galería para seleccionar una imagen
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: 'images',
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     });
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri); // Guarda la URI de la imagen seleccionada
+      setImage(result.assets[0].uri);
     }
   }
 
@@ -47,6 +46,7 @@ const RechargePage = () => {
   }
 
   console.log(codeBank)
+  console.log("Saldo: ", amount)
 
   return (
     <View style={{ height: "100%" }}>

@@ -1,4 +1,13 @@
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import KaosLogo from "@/components/Icons/KaosLogo";
@@ -10,7 +19,7 @@ import { useRouter } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
 
 const register = () => {
-  const {setDataUser, setToken} = useAuth()
+  const { setDataUser, setToken } = useAuth();
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(true);
   const [showPassword2, setShowPassword2] = useState(true);
@@ -46,24 +55,27 @@ const register = () => {
       return;
     }
     try {
-      const response = await fetch(`${process.env.EXPO_PUBLIC_BACKEND_URL}/auth/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json; charset=utf-8",
-        },
-        body: JSON.stringify({
-          name: username,
-          email: email,
-          password: password,
-          phone: phone,
-        }),
-      });
+      const response = await fetch(
+        `${process.env.EXPO_PUBLIC_BACKEND_URL}/auth/register`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json; charset=utf-8",
+          },
+          body: JSON.stringify({
+            name: username,
+            email: email,
+            password: password,
+            phone: phone,
+          }),
+        }
+      );
       const data = await response.json();
       console.log("Datos del registro: ", data);
       if (data) {
         Alert.alert("Registro exitoso", `Bienvenido ${username}`);
-        setDataUser(data.email)
-        setToken(data.token)
+        setDataUser(data.email);
+        setToken(data.token);
         router.navigate("/screens/main/main"); // Redirigir a la pantalla principal
       } else if (data.status === "FIELD_ERROR") {
         Alert.alert("Error", "Revisa los campos del formulario.");
@@ -77,122 +89,139 @@ const register = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          width: 390,
-          backgroundColor: "#fff",
-          gap: 23,
-        }}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
       >
-        <View style={{ alignItems: "center", gap: 10 }}>
-          <KaosLogo width={214} height={224} />
-          <KaosLogoText width={144} height={31} />
-        </View>
-        <View style={{ justifyContent: "center", gap: 20 }}>
-          <View style={{ gap: 20 }}>
-            <TextField
-              style={{
-                width: 171,
-                borderBottomWidth: 1,
-                borderColor: "#E9E9E9",
-                fontSize: 18,
-              }}
-              placeholder={"Nombre"}
-              floatingPlaceholder
-              autoCapitalize="none"
-              floatingPlaceholderStyle={{ fontSize: 18 }}
-              onChangeText={setUsername}
-              value={username}
-            />
-            <TextField
-              style={{
-                width: 171,
-                borderBottomWidth: 1,
-                borderColor: "#E9E9E9",
-                fontSize: 18,
-              }}
-              placeholder={"Correo electronico"}
-              floatingPlaceholder
-              autoCapitalize="none"
-              floatingPlaceholderStyle={{ fontSize: 18 }}
-              onChangeText={setEmail}
-              value={email}
-            />
-            <TextField
-              style={{
-                width: 171,
-                borderBottomWidth: 1,
-                borderColor: "#E9E9E9",
-                fontSize: 18,
-              }}
-              placeholder={"Numero telefonico"}
-              floatingPlaceholder
-              autoCapitalize="none"
-              floatingPlaceholderStyle={{ fontSize: 18 }}
-              onChangeText={setPhone}
-              value={phone}
-            />
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <TextField
-                style={{
-                  width: 171,
-                  borderBottomWidth: 1,
-                  borderColor: "#E9E9E9",
-                  fontSize: 18,
-                }}
-                placeholder={"Contraseña"}
-                floatingPlaceholder
-                autoCapitalize="none"
-                floatingPlaceholderStyle={{ fontSize: 18 }}
-                onChangeText={setPassword}
-                value={password}
-                secureTextEntry={showPassword}
-              />
-              <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                <Ionicons
-                  name={showPassword ? "eye-off" : "eye"}
-                  size={24}
-                  color={Colors.grey40}
-                />
-              </TouchableOpacity>
+        <ScrollView
+          contentContainerStyle={{
+            flexGrow: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              width: 390,
+              backgroundColor: "#fff",
+              gap: 23,
+              paddingVertical: 20,
+            }}
+          >
+            <View style={{ alignItems: "center", gap: 10 }}>
+              <KaosLogo width={214} height={224} />
+              <KaosLogoText width={144} height={31} />
             </View>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <TextField
-                style={{
-                  width: 171,
-                  borderBottomWidth: 1,
-                  borderColor: "#E9E9E9",
-                  fontSize: 18,
-                }}
-                placeholder={"Repite Contraseña"}
-                floatingPlaceholder
-                autoCapitalize="none"
-                floatingPlaceholderStyle={{ fontSize: 18 }}
-                onChangeText={setRepeatPassword}
-                value={repeatPassword}
-                secureTextEntry={showPassword2}
-              />
-              <TouchableOpacity
-                onPress={() => setShowPassword2(!showPassword2)}
-              >
-                <Ionicons
-                  name={showPassword2 ? "eye-off" : "eye"}
-                  size={24}
-                  color={Colors.grey40}
+            <View style={{ justifyContent: "center", gap: 20 }}>
+              <View style={{ gap: 20 }}>
+                <TextField
+                  style={{
+                    width: 171,
+                    borderBottomWidth: 1,
+                    borderColor: "#E9E9E9",
+                    fontSize: 18,
+                  }}
+                  placeholder={"Nombre"}
+                  floatingPlaceholder
+                  autoCapitalize="none"
+                  floatingPlaceholderStyle={{ fontSize: 18 }}
+                  onChangeText={setUsername}
+                  value={username}
                 />
-              </TouchableOpacity>
+                <TextField
+                  style={{
+                    width: 171,
+                    borderBottomWidth: 1,
+                    borderColor: "#E9E9E9",
+                    fontSize: 18,
+                  }}
+                  placeholder={"Correo electronico"}
+                  floatingPlaceholder
+                  autoCapitalize="none"
+                  floatingPlaceholderStyle={{ fontSize: 18 }}
+                  onChangeText={setEmail}
+                  value={email}
+                />
+                <TextField
+                  style={{
+                    width: 171,
+                    borderBottomWidth: 1,
+                    borderColor: "#E9E9E9",
+                    fontSize: 18,
+                  }}
+                  placeholder={"Numero telefonico"}
+                  floatingPlaceholder
+                  autoCapitalize="none"
+                  floatingPlaceholderStyle={{ fontSize: 18 }}
+                  onChangeText={setPhone}
+                  value={phone}
+                />
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <TextField
+                    style={{
+                      width: 171,
+                      borderBottomWidth: 1,
+                      borderColor: "#E9E9E9",
+                      fontSize: 18,
+                    }}
+                    placeholder={"Contraseña"}
+                    floatingPlaceholder
+                    autoCapitalize="none"
+                    floatingPlaceholderStyle={{ fontSize: 18 }}
+                    onChangeText={setPassword}
+                    value={password}
+                    secureTextEntry={showPassword}
+                  />
+                  <TouchableOpacity
+                    onPress={() => setShowPassword(!showPassword)}
+                  >
+                    <Ionicons
+                      name={showPassword ? "eye-off" : "eye"}
+                      size={24}
+                      color={Colors.grey40}
+                    />
+                  </TouchableOpacity>
+                </View>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <TextField
+                    style={{
+                      width: 171,
+                      borderBottomWidth: 1,
+                      borderColor: "#E9E9E9",
+                      fontSize: 18,
+                    }}
+                    placeholder={"Repite Contraseña"}
+                    floatingPlaceholder
+                    autoCapitalize="none"
+                    floatingPlaceholderStyle={{ fontSize: 18 }}
+                    onChangeText={setRepeatPassword}
+                    value={repeatPassword}
+                    secureTextEntry={showPassword2}
+                  />
+                  <TouchableOpacity
+                    onPress={() => setShowPassword2(!showPassword2)}
+                  >
+                    <Ionicons
+                      name={showPassword2 ? "eye-off" : "eye"}
+                      size={24}
+                      color={Colors.grey40}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+              <BigButton
+                style={{ backgroundColor: "#F15A24", width: 192, height: 39 }}
+                children={"Registrarse"}
+                onPress={handleRegister}
+              />
             </View>
           </View>
-          <BigButton
-            style={{ backgroundColor: "#F15A24", width: 192, height: 39 }}
-            children={"Registrarse"}
-            onPress={handleRegister}
-          />
-        </View>
-      </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

@@ -23,7 +23,7 @@ const Withdraw = () => {
           Recarge/Retire su saldo personal
         </Text>
         <BigButton
-          onPress={() => router.replace("/screens/main/withdrawPage")}
+          onPress={() => router.replace("/screens/main/rechargePage")}
           children={"Recargar"}
           style={{ backgroundColor: "#F15C26", width: 140 }}
         />

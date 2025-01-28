@@ -95,7 +95,18 @@ export const GET_ALL_USERS = gql`
         gameUserId
       }
       banks {
+        id
         bankName
+        binancePayId
+        bankCode
+        userBankPhone
+        userDniBank
+      }
+      deposits {
+        userId
+        deposit
+        depositImage
+        rol
       }
     }
   }
@@ -128,6 +139,12 @@ export const GET_USER_BY_ID = gql`
         userBankPhone
         userDniBank
       }
+      deposits {
+        userId
+        deposit
+        depositImage
+        rol
+      }
     }
   }
 `;
@@ -158,6 +175,12 @@ export const GET_USER_BY_EMAIL = gql`
         bankCode
         userBankPhone
         userDniBank
+      }
+      deposits {
+        userId
+        deposit
+        depositImage
+        rol
       }
     }
   }

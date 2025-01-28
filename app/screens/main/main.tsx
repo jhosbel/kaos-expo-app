@@ -32,7 +32,7 @@ const Main = () => {
     refetch();
   }, []);
 
-  console.log(data);
+  console.log("Datos de juegos: ", data);
 
   if (loading) {
     return <LoadingPage />;

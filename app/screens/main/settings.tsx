@@ -9,6 +9,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import { UPDATE_USER } from "@/graphql/mutations";
 import { useAuth } from "@/context/AuthContext";
 import { GET_USER_BY_EMAIL } from "@/graphql/queries";
+import KaosLogo from "@/components/Icons/KaosLogo";
 
 const Settings = () => {
   const { dataUser } = useAuth();
@@ -20,6 +21,7 @@ const Settings = () => {
   const [updateUser] = useMutation(UPDATE_USER);
   const [changeEmail, setChangeEmail] = useState(false);
   const [changePassword, setChangePassword] = useState(false);
+  const [vertion, setVertion] = useState(false);
   const [newEmail, setNewEmail] = useState("");
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -152,6 +154,7 @@ const Settings = () => {
           style={{ backgroundColor: "#F15C26", width: 250 }}
         />
         <BigButton
+        onPress={() => setVertion(true)}
           children={"Acerca de"}
           style={{ backgroundColor: "#F15C26", width: 250 }}
         />
@@ -280,6 +283,26 @@ const Settings = () => {
               children={"Cancelar"}
             />
           </View>
+        </View>
+      </SmallModalComponent>
+      <SmallModalComponent
+        isVisible={vertion}
+        setIsVisible={setVertion}
+        containerStyles={{ height: 450 }}
+      >
+        <View
+          style={{
+            height: 400,
+            justifyContent: "center",
+            alignItems: "center",
+            gap: 20,
+          }}
+        >
+          <KaosLogo width={200} height={200} />
+          <Text>Version: 0.0.1</Text>
+          <BigButton onPress={() => setVertion(false)}
+              style={{ backgroundColor: "#39B97C", width: 140 }}
+              children={"Volver"} />
         </View>
       </SmallModalComponent>
     </View>
