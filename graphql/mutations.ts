@@ -155,3 +155,15 @@ export const CREATE_USER_DEPOSIT = gql`
     }
   }
 `;
+
+export const UPDATE_USER_DEPOSIT_ROLE = gql`
+  mutation UpdateUserDepositRole($id: Int!, $newRole: String!) {
+    updateUserDepositRole(id: $id, newRole: $newRole) {
+      id
+      deposit
+      depositImage
+      userId
+      rol
+    }
+  }
+`;

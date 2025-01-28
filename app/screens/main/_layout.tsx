@@ -127,6 +127,12 @@ const Layout = () => {
           }}
         />
         <Drawer.Screen
+          name="paymentList"
+          options={{
+            drawerItemStyle: { display: "none" },
+          }}
+        />
+        <Drawer.Screen
           name="profile"
           options={{
             drawerLabel: () => (
