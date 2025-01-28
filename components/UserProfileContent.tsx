@@ -55,6 +55,7 @@ const UserProfileContent = (props: any) => {
               width: 130,
               height: 130,
               borderRadius: 100,
+              backgroundColor: "#fff"
             }}
           />
           <Text style={{ fontSize: 20, color: "#fff" }}>

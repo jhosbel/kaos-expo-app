@@ -111,6 +111,7 @@ const Profile = () => {
             height: 130,
             borderRadius: 100,
             marginTop: 25,
+            backgroundColor: "#fff"
           }}
         />
         <Text

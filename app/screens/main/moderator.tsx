@@ -5,11 +5,16 @@ import BigButton from "@/components/BigButton";
 import { useRouter } from "expo-router";
 import SmallModalComponent from "@/components/SmallModalComponent";
 import { TextField } from "react-native-ui-lib";
+import { useQuery } from "@apollo/client";
+import { GET_USERS_DEPOSITS } from "@/graphql/queries";
 
 const Moderator = () => {
   const router = useRouter();
+  const {data} = useQuery(GET_USERS_DEPOSITS)
   const [deleteRoom, setDeleteRoom] = useState(false);
   const [confirmationDelete, setConfirmationDelete] = useState(false);
+
+  console.log("Datos de depositos: ", data)
 
   return (
     <View style={{ height: "100%" }}>

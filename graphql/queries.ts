@@ -198,3 +198,25 @@ export const GET_USER_GAMES_BY_ID = gql`
     }
   }
 `;
+
+export const GET_USERS_DEPOSITS = gql`
+  query UsersDeposits {
+    UsersDeposits {
+      id
+      deposit
+      depositImage
+      userId
+      rol
+      user {
+        id
+        name
+        avatar
+        email
+        phone
+        rol
+        crdBalance
+        usdBalance
+      }
+    }
+  }
+`;

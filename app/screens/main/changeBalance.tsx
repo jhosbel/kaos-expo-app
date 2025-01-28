@@ -100,7 +100,7 @@ const ChangeBalance = () => {
           onValueChange={(value) => setSelectedValue(value)}
           items={[
             {
-              label: data?.userByEmail?.crdBalance,
+              label: `Saldo disponible: ${data?.userByEmail?.crdBalance}`,
               value: data?.userByEmail?.crdBalance,
             },
           ]}
