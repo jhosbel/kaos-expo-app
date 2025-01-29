@@ -32,8 +32,6 @@ const Main = () => {
     refetch();
   }, []);
 
-  console.log("Datos de juegos: ", data);
-
   if (loading) {
     return <LoadingPage />;
   }
@@ -69,7 +67,7 @@ const Main = () => {
             {gamePair.map((game: any, i: any) => (
               <CardGame
                 key={i}
-                cardImage={{ uri: game.avatar }}
+                cardImage={game.avatar}
                 gameName={game.name}
                 onPress={() =>
                   router.replace(

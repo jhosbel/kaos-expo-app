@@ -49,11 +49,11 @@ const ChangeBalance = () => {
       return;
     }
     try {
-      const result = await convertCrdToUsd({
+      await convertCrdToUsd({
         variables: { id: data?.userByEmail?.id, amount: Number(amount) },
       });
-      console.log("Conversion successful:", result.data.convertCrdToUsd);
-      refetch()
+      setAmount("");
+      refetch();
     } catch (error) {
       console.error("Error convirtiendo el balance:", error);
     }

@@ -40,6 +40,7 @@ const Games = () => {
     }
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: 'images',
+      allowsEditing: true,
       quality: 1,
     });
     if (!result.canceled) {
@@ -84,15 +85,12 @@ const Games = () => {
     setOpenImg(false)
   }
 
-  console.log(data);
-  console.log(formData);
-
   if (loading) {
     return <LoadingPage />;
   }
 
   if (error) {
-    console.error("Error en la consulta: ", error);
+    console.error("Error en la consulta Games: ", error);
     return <ErrorPage />;
   }
 

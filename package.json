@@ -16,6 +16,7 @@
   "dependencies": {
     "@apollo/client": "^3.12.4",
     "@expo/vector-icons": "^14.0.2",
+    "@likashefqet/react-native-image-zoom": "^4.3.0",
     "@react-native-async-storage/async-storage": "^2.1.0",
     "@react-native-community/datetimepicker": "8.2.0",
     "@react-native-picker/picker": "^2.10.2",
@@ -23,6 +24,7 @@
     "@react-navigation/native": "^7.0.0",
     "expo": "~52.0.17",
     "expo-font": "~13.0.1",
+    "expo-image": "^2.0.4",
     "expo-image-picker": "~16.0.4",
     "expo-linking": "~7.0.3",
     "expo-router": "~4.0.11",
@@ -38,6 +40,7 @@
     "react-native-dotenv": "^3.4.11",
     "react-native-gesture-handler": "^2.21.2",
     "react-native-get-random-values": "^1.11.0",
+    "react-native-image-zoom-viewer": "^3.0.1",
     "react-native-picker-select": "^9.3.1",
     "react-native-reanimated": "^3.16.7",
     "react-native-safe-area-context": "^5.0.0",

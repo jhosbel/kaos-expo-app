@@ -1,12 +1,14 @@
 import { Alert, StyleSheet, Text, View } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { GET_ALL_GAMES } from "@/graphql/queries";
 import { useMutation, useQuery } from "@apollo/client";
 import BigButton from "./BigButton";
 import { TextField } from "react-native-ui-lib";
 import { ASSIGN_GAME_TO_USER } from "@/graphql/mutations";
 import { useAuth } from "@/context/AuthContext";
+import LoadingPage from "./LoadingPage";
+import ErrorPage from "./ErrorPage";
 
 const AddGameToUser = ({ userEmail, setOpen, refetchUserData }: any) => {
   const { dataUser, token } = useAuth();
@@ -16,14 +18,16 @@ const AddGameToUser = ({ userEmail, setOpen, refetchUserData }: any) => {
       fetchPolicy: "no-cache",
     }
   );
-  const [assingGameToUser, { data, loading, error }] =
-    useMutation(ASSIGN_GAME_TO_USER, {update(cache, {data: {updateUserStats}}) {
-      cache.modify({
-        fields: {
-
-        }
-      })
-    }});
+  const [assingGameToUser, { data, loading, error }] = useMutation(
+    ASSIGN_GAME_TO_USER,
+    {
+      update(cache, { data: { updateUserStats } }) {
+        cache.modify({
+          fields: {},
+        });
+      },
+    }
+  );
   const [gameId, setGameId] = useState<Number>();
   const [nickname, setNickname] = useState<String>();
   const [gameUserId, setgameUserId] = useState<String>();
@@ -48,7 +52,7 @@ const AddGameToUser = ({ userEmail, setOpen, refetchUserData }: any) => {
         }, */
       });
       console.log("Juego agregado exitosamente: ", response.data);
-      await refetchUserData()
+      await refetchUserData();
       refetchAllGames();
       setOpen(false);
     } catch (error) {
@@ -56,42 +60,11 @@ const AddGameToUser = ({ userEmail, setOpen, refetchUserData }: any) => {
     }
   };
 
-  if (loading)
-    return (
-      <View style={{ height: "100%", alignItems: "center", gap: 20 }}>
-        <Text>Loading...</Text>
-      </View>
-    );
-  if (error)
-    return (
-      <View
-        style={{
-          height: "100%",
-          alignItems: "center",
-          gap: 20,
-          justifyContent: "center",
-        }}
-      >
-        <Text style={{ fontSize: 25, color: "#6F6F6F", textAlign: "center" }}>
-          Error: {error.message}
-        </Text>
-        <BigButton
-          onPress={() => setOpen(false)}
-          style={{
-            backgroundColor: "#F24643",
-            width: 140,
-            marginTop: 15,
-            alignSelf: "center",
-          }}
-          children={"Cerrar"}
-        />
-      </View>
-    );
-
-  console.log("Game ID: ", gameId);
-  console.log("User Email: ", userEmail);
-  console.log("Nickname: ", nickname);
-  console.log("Game User ID: ", gameUserId);
+  if (loading) return <LoadingPage />;
+  if (error) {
+    console.error("Error en la consulta Payment List: ", error);
+    return <ErrorPage />;
+  }
 
   return (
     <View style={{ height: "100%", alignItems: "center", gap: 20 }}>

@@ -1,5 +1,6 @@
-import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
-import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React from "react";
+import { Image } from "expo-image";
 
 const CardGame = ({ onPress, cardImage, gameName, cardStyles }: any) => {
   return (
@@ -23,7 +24,7 @@ const CardGame = ({ onPress, cardImage, gameName, cardStyles }: any) => {
         }}
       >
         <Image
-          source={cardImage}
+          source={{uri: cardImage}}
           className="rounded-full object-fill"
           style={{
             width: 130,

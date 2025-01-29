@@ -167,3 +167,21 @@ export const UPDATE_USER_DEPOSIT_ROLE = gql`
     }
   }
 `;
+
+export const ADD_USER_TO_ROOM = gql`
+  mutation AddUserToRoom($roomId: Int!, $userId: Int!) {
+    addUserToRoom(roomId: $roomId, userId: $userId) {
+      id
+      gameId
+      gameName
+      roomGameId
+      roomPassword
+      playersNum
+      mode
+      time
+      date
+      usersId
+      status
+    }
+  }
+`;

@@ -30,9 +30,6 @@ const UserPayments = ({
   const [open, setOpen] = useState(false);
   const [isImageExpanded, setIsImageExpanded] = useState(false);
 
-  console.log("Crd", typeof crdBalance);
-  console.log(deposit);
-
   const confirmPay = () => {
     Alert.alert(
       "Revisaste los datos correctamente?",
@@ -57,15 +54,12 @@ const UserPayments = ({
       return;
     }
     let sum = Number(deposit) + crdBalance;
-    console.log("Suma total: ", sum);
     try {
       await updateUser({
         variables: {
           updateUserInput: { id: userId, crdBalance: sum },
         },
       });
-      const depositIdNumber = parseInt(depositId, 10);
-      console.log("Variables enviadas:", { id: depositIdNumber, newRole: "FINISH" });
       await updateUserDepositRole({
         variables: {
           id: depositId,

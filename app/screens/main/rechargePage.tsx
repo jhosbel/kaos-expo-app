@@ -43,7 +43,7 @@ const RechargePage = () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: "images",
       allowsEditing: true,
-      aspect: [4, 3],
+      //aspect: [4, 3],
       quality: 1,
     });
 
@@ -56,6 +56,7 @@ const RechargePage = () => {
     setFinishRecharge(false);
     setimgLoad(false);
     setSure(false);
+    setAmount("");
   };
 
   const handleSubmit = async () => {
@@ -383,11 +384,11 @@ const RechargePage = () => {
               style={{ backgroundColor: "#39B97C", width: 140 }}
               children={"Siguiente"}
             />
-            {/* <BigButton
-                    style={{ backgroundColor: "#F24643", width: 140 }}
-                    onPress={() => setimgLoad(false)}
-                    children={"Cancelar"}
-                /> */}
+            <BigButton
+              style={{ backgroundColor: "#F24643", width: 140 }}
+              onPress={closeAll}
+              children={"Cancelar"}
+            />
           </View>
         </View>
       </SmallModalComponent>

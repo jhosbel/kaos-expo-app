@@ -15,10 +15,11 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import SmallModalComponent from "@/components/SmallModalComponent";
 import { useMutation, useQuery } from "@apollo/client";
 import { CREATE_ROOM } from "@/graphql/mutations";
-import { GET_ALL_GAMES } from "@/graphql/queries";
+import { GET_ALL_GAMES, GET_ALL_ROOMS } from "@/graphql/queries";
 
 const MakeRoom = () => {
   const { data } = useQuery(GET_ALL_GAMES, { fetchPolicy: "no-cache" });
+  const { refetch } = useQuery(GET_ALL_ROOMS, { fetchPolicy: "no-cache" });
   const [createRoom] = useMutation(CREATE_ROOM);
   const [selectedValue, setSelectedValue] = useState("");
   const [dataFormat, setDataFormat] = useState("");
@@ -76,6 +77,7 @@ const MakeRoom = () => {
       });
       console.log("Sala creada exitosamente: ", response.data);
       setEndMakeRoom(true);
+      refetch()
     } catch (error) {
       console.error("Error al crear la Sala: ", error);
     }
