@@ -10,51 +10,28 @@ import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { GET_ROOM_BY_ID, GET_USER_GAMES_BY_ID } from "@/graphql/queries";
 import client from "@/app/apolloClient";
 import { UPDATE_USER_STATS } from "@/graphql/mutations";
+import LoadingPage from "@/components/LoadingPage";
+import ErrorPage from "@/components/ErrorPage";
 
 const EditRoom = () => {
   const [roomId, setRoomId] = useState("");
   const [roomData, setRoomData] = useState<any>(null);
   const router = useRouter();
   const [usersData, setUsersData] = useState<any>([]);
-  const [selectedValue, setSelectedValue] = useState("");
-  const [showUser, setShowUser] = useState(false);
-  const [getRoomById] = useLazyQuery(GET_ROOM_BY_ID);
+  const [getRoomById, { loading, error }] = useLazyQuery(GET_ROOM_BY_ID);
 
-  const fetchUsersData = async (userIds: any) => {
-    try {
-      const userPromises = userIds.map((id: any) =>
-        client.query({
-          query: GET_USER_GAMES_BY_ID,
-          fetchPolicy: "no-cache",
-          variables: { userId: id },
-        })
-      );
-      const users = await Promise.all(userPromises);
-      const userDetails = users.map((result) => {
-        const userGame = result.data.userGameDetails[0];
-        return {
-          nickname: userGame?.nickname,
-          userId: userGame?.userId,
-        };
-      });
-      setUsersData(userDetails);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (!roomId.trim()) {
       alert("Por favor, ingrese un ID válido.");
       return;
     }
-    getRoomById({
+    await getRoomById({
       variables: { id: Number(roomId) },
       fetchPolicy: "no-cache",
       onCompleted: (data) => {
         if (data?.room) {
           setRoomData(data.room);
-          fetchUsersData(data.room.usersId.map((stat: any) => stat));
+          setUsersData(data.room.userStats);
         } else {
           setRoomData(null);
           setUsersData([]);
@@ -68,9 +45,14 @@ const EditRoom = () => {
     });
   };
 
-  console.log("Datos una sala: ", roomData?.userStats);
-  console.log("Usuarios: ", usersData);
-  console.log("Numero: ", usersData.length);
+  if (loading) {
+    return <LoadingPage />;
+  }
+
+  if (error) {
+    console.error("Error en la consulta Main: ", error);
+    return <ErrorPage />;
+  }
 
   return (
     <View style={{ height: "100%" }}>
@@ -86,20 +68,6 @@ const EditRoom = () => {
         <Text style={{ color: "#6F6F6F", fontSize: 25, marginTop: 25 }}>
           Editar sala
         </Text>
-        <RNPickerSelect
-          onValueChange={(value) => setSelectedValue(value)}
-          items={[
-            { label: "Call Of Duty Mobile", value: "cofmobile" },
-            { label: "PUBG Mobile", value: "pubgmobile" },
-            { label: "Counter Strike 2", value: "cs2" },
-            { label: "Fortnite", value: "fortnite" },
-          ]}
-          style={{
-            inputAndroid: styles.input,
-            inputIOS: styles.input,
-          }}
-          placeholder={{ label: "Eliga una opcion...", value: null }}
-        />
         <View style={{ alignItems: "center", gap: 20, flexDirection: "row" }}>
           <Text style={{ color: "#6F6F6F", fontSize: 15 }}>
             Ingrese el ID de la sala
@@ -194,23 +162,19 @@ const EditRoom = () => {
           </View>
           <ScrollView style={{ backgroundColor: "#fff", padding: 0 }}>
             <View>
-              {usersData?.map((user: any, index: number) => {
-                const userStats = roomData?.userStats?.find(
-                  (stat: any) => stat.userId === user.userId
-                );
-                return (
-                  <View key={index}>
+              {usersData &&
+                usersData.map((user: any, i: any) => (
+                  <View key={i}>
                     <UserGameDetails
                       name={user.nickname}
                       userId={user.userId}
                       idRoom={roomId}
-                      kills={userStats.kills}
-                      position={userStats.position}
-                      timePlayed={userStats.timePlayed}
+                      kills={user.kills}
+                      position={user.position}
+                      timePlayed={user.timePlayed}
                     />
                   </View>
-                );
-              })}
+                ))}
             </View>
           </ScrollView>
         </View>

@@ -8,7 +8,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import { useAuth } from "@/context/AuthContext";
 import { GET_USER_BY_EMAIL } from "@/graphql/queries";
 
-const RoomSelected = ({ date, time, mode, players, roomId }: any) => {
+const RoomSelected = ({ date, time, mode, players, roomId, gameId }: any) => {
   const { dataUser } = useAuth();
   const { data, loading, error, refetch } = useQuery(GET_USER_BY_EMAIL, {
     variables: { email: dataUser },
@@ -18,9 +18,6 @@ const RoomSelected = ({ date, time, mode, players, roomId }: any) => {
   const [updateUser] = useMutation(UPDATE_USER);
   const [sure, setSure] = useState(false);
   const router = useRouter();
-
-  console.log(roomId);
-  console.log("Datos de usuario", data?.userByEmail?.crdBalance);
 
   const confirmEnterRoom = () => {
     Alert.alert(
@@ -52,16 +49,21 @@ const RoomSelected = ({ date, time, mode, players, roomId }: any) => {
           updateUserInput: { id: data?.userByEmail?.id, crdBalance: pay },
         },
       });
+      console.log({roomId: roomId, userId: data?.userByEmail?.id, gameId: Number(gameId)})
       await addUserToRoom({
         variables: {
           roomId: roomId,
           userId: data?.userByEmail?.id,
+          gameId: Number(gameId)
         },
       });
       refetch()
       router.replace("/screens/main/waitingRoom")
     } catch (error) {
-      console.error("Error al agregarse a la sala:", error);
+      if (error instanceof Error) {
+        //console.error("Error al agregarse a la sala:", error.message);
+        if(error.message === "User not have the game") Alert.alert('No tienes el juego agregado correspondiente a esta sala!')
+      }
     }
   };
 

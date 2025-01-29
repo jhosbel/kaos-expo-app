@@ -17,12 +17,13 @@ import LoadingPage from "@/components/LoadingPage";
 import ErrorPage from "@/components/ErrorPage";
 
 const SelectedGame = () => {
-  const { name, avatar }: any = useLocalSearchParams();
+  const { name, avatar, gameId }: any = useLocalSearchParams();
   const { loading, data, error, refetch } = useQuery(GET_ALL_ROOMS, {
     fetchPolicy: "no-cache",
   });
 
   console.log("Avatar: ", avatar);
+  console.log("ID del juego: ", gameId);
 
   useEffect(() => {
     refetch();
@@ -30,7 +31,7 @@ const SelectedGame = () => {
 
   if (loading) return <LoadingPage />;
   if (error) {
-    console.error("Error en la consulta UserList: ", error);
+    console.error("Error en la consulta SelectedGame: ", error);
     <ErrorPage />;
   }
   if (!data || !data.rooms) return <Text>No rooms available</Text>;
@@ -98,6 +99,7 @@ const SelectedGame = () => {
                 mode={room.mode}
                 players={room.playersNum}
                 roomId={room.id}
+                gameId={gameId}
               />
             ))}
           </ScrollView>

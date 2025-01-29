@@ -12,13 +12,14 @@ export const GET_ALL_ROOMS = gql`
       mode
       time
       date
-      usersId
       status
       userStats {
         userId
         kills
         timePlayed
         position
+        gameUserId
+        nickname
       }
     }
   }
@@ -36,13 +37,14 @@ export const GET_ROOM_BY_ID = gql`
       mode
       time
       date
-      usersId
       status
       userStats {
         userId
         kills
         timePlayed
         position
+        gameUserId
+        nickname
       }
     }
   }
@@ -103,6 +105,7 @@ export const GET_ALL_USERS = gql`
         userDniBank
       }
       deposits {
+        id
         userId
         deposit
         depositImage

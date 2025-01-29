@@ -71,7 +71,7 @@ const Main = () => {
                 gameName={game.name}
                 onPress={() =>
                   router.replace(
-                    `/screens/main/selectedGame?name=${game.name}&avatar=${game.avatar}`
+                    `/screens/main/selectedGame?name=${game.name}&avatar=${game.avatar}&gameId=${game.id}`
                   )
                 }
               />

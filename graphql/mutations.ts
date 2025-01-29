@@ -12,7 +12,6 @@ export const CREATE_ROOM = gql`
       mode
       time
       date
-      usersId
       status
     }
   }
@@ -169,8 +168,8 @@ export const UPDATE_USER_DEPOSIT_ROLE = gql`
 `;
 
 export const ADD_USER_TO_ROOM = gql`
-  mutation AddUserToRoom($roomId: Int!, $userId: Int!) {
-    addUserToRoom(roomId: $roomId, userId: $userId) {
+  mutation AddUserToRoom($roomId: Int!, $userId: Int!, $gameId: Int!) {
+    addUserToRoom(roomId: $roomId, userId: $userId, gameId: $gameId) {
       id
       gameId
       gameName
@@ -180,7 +179,6 @@ export const ADD_USER_TO_ROOM = gql`
       mode
       time
       date
-      usersId
       status
     }
   }
