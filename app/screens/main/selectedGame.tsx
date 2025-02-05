@@ -37,10 +37,10 @@ const SelectedGame = () => {
   if (!data || !data.rooms) return <Text>No rooms available</Text>;
 
   const filteredRooms = data.rooms.filter(
-    (room: any) => room.gameName === name
+    (room: any) => room.gameName === name && room.status !== "finished"
   );
 
-  console.log("Filtrados: ", filteredRooms)
+  console.log("Filtrados: ", filteredRooms?.status);
 
   return (
     <View style={{ height: "100%" }}>
@@ -53,9 +53,6 @@ const SelectedGame = () => {
           gap: 20,
         }}
       >
-        {/* <View style={{ width: 300, height: 300 }}>
-          <Image source={{uri: avatar}} />
-        </View> */}
         <CardGame
           cardStyles={{ marginTop: 20 }}
           cardImage={avatar}

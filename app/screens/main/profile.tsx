@@ -40,14 +40,18 @@ const Profile = () => {
       );
     }
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: 'images',
+      mediaTypes: "images",
       quality: 1,
+      allowsEditing: true,
+      base64: true,
     });
     if (!result.canceled) {
-      const image = result.assets[0].uri;
+      //const image = result.assets[0].uri;
+      const base64Image = `data:image/jpeg;base64,${result.assets[0].base64}`;
+      console.log(base64Image)
       await updateUser({
         variables: {
-          updateUserInput: { id: data?.userByEmail?.id, avatar: image },
+          updateUserInput: { id: data?.userByEmail?.id, avatar: base64Image },
         },
       });
       refetch();
@@ -61,14 +65,17 @@ const Profile = () => {
       return;
     }
     let result = await ImagePicker.launchCameraAsync({
-      mediaTypes: 'images',
+      mediaTypes: "images",
       quality: 1,
+      allowsEditing: true,
+      base64: true,
     });
     if (!result.canceled) {
-      const image = result.assets[0].uri;
+      //const image = result.assets[0].uri;
+      const base64Image = `data:image/jpeg;base64,${result.assets[0].base64}`;
       await updateUser({
         variables: {
-          updateUserInput: { id: data?.userByEmail?.id, avatar: image },
+          updateUserInput: { id: data?.userByEmail?.id, avatar: base64Image },
         },
       });
       refetch();
@@ -111,7 +118,7 @@ const Profile = () => {
             height: 130,
             borderRadius: 100,
             marginTop: 25,
-            backgroundColor: "#fff"
+            backgroundColor: "#fff",
           }}
         />
         <Text

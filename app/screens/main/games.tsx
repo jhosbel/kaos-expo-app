@@ -39,15 +39,18 @@ const Games = () => {
       );
     }
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: 'images',
+      mediaTypes: "images",
       allowsEditing: true,
-      quality: 1,
+      quality: 0.5,
+      base64: true,
     });
     if (!result.canceled) {
-      const image = result.assets[0].uri;
-      handleInputChange("avatar", image);
-      setOpenImg(false)
-      refetch();
+      const base64Image = `data:image/jpeg;base64,${result.assets[0].base64}`;
+      if (base64Image) {
+        handleInputChange("avatar", base64Image);
+        setOpenImg(false);
+        refetch();
+      }
     }
   };
 
@@ -64,7 +67,7 @@ const Games = () => {
       return;
     }
     try {
-      const response = await createGame({
+      await createGame({
         variables: {
           input: {
             name: formData.name,
@@ -72,7 +75,6 @@ const Games = () => {
           },
         },
       });
-      console.log("Juego creado: ", response.data);
       await refetch();
       setFormData({ name: "", avatar: "" });
     } catch (error) {
@@ -81,9 +83,9 @@ const Games = () => {
   };
 
   const closeModal = () => {
-    setFormData({name: "", avatar: ""})
-    setOpenImg(false)
-  }
+    setFormData({ name: "", avatar: "" });
+    setOpenImg(false);
+  };
 
   if (loading) {
     return <LoadingPage />;
@@ -213,7 +215,7 @@ const Games = () => {
                 borderRadius: 4,
                 paddingHorizontal: 5,
                 width: 300,
-                height: 30
+                height: 30,
               }}
               keyboardType={"default"}
               placeholder={"https://imagen.jpg"}

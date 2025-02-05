@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import NavBar from "@/components/NavBar";
 import { TextField } from "react-native-ui-lib";
@@ -9,7 +9,10 @@ import { useRouter } from "expo-router";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { GET_ROOM_BY_ID, GET_USER_GAMES_BY_ID } from "@/graphql/queries";
 import client from "@/app/apolloClient";
-import { UPDATE_USER_STATS } from "@/graphql/mutations";
+import {
+  UPDATE_ROOM_STATUS_TO_FINISHED,
+  UPDATE_USER_STATS,
+} from "@/graphql/mutations";
 import LoadingPage from "@/components/LoadingPage";
 import ErrorPage from "@/components/ErrorPage";
 
@@ -18,7 +21,46 @@ const EditRoom = () => {
   const [roomData, setRoomData] = useState<any>(null);
   const router = useRouter();
   const [usersData, setUsersData] = useState<any>([]);
-  const [getRoomById, { loading, error }] = useLazyQuery(GET_ROOM_BY_ID);
+  const [getRoomById, { loading, error, refetch }] =
+    useLazyQuery(GET_ROOM_BY_ID);
+  const [updateRoomStatusToFinished] = useMutation(
+    UPDATE_ROOM_STATUS_TO_FINISHED
+  );
+
+
+  const confirmEnterRoom = () => {
+    Alert.alert(
+      "Seguro que desea finalizar la sala?",
+      "¿Quieres continuar?",
+      [
+        {
+          text: "Cancelar",
+          style: "cancel",
+        },
+        {
+          text: "Aceptar",
+          onPress: handleFinishRoom,
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
+  const handleFinishRoom = async () => {
+    console.log("Room ID:", roomId);
+    try {
+      await updateRoomStatusToFinished({
+        variables: { id: Number(roomId) },
+      });
+      alert("Sala finalizada!");
+      router.replace("/screens/main/moderator");
+    } catch (error) {
+      if (error instanceof Error) {
+        Alert.alert(error.message);
+        console.error("Error al actualizar la sala:", error.message);
+      }
+    }
+  };
 
   const handleSearch = async () => {
     if (!roomId.trim()) {
@@ -92,11 +134,13 @@ const EditRoom = () => {
             style={{ backgroundColor: "#39B97C", width: 120, height: 35 }}
             children={"Buscar"}
           />
-          <BigButton
-            onPress={() => router.replace("/screens/main/moderator")}
-            style={{ backgroundColor: "#39B97C", width: 120, height: 35 }}
-            children={"Finalizar"}
-          />
+          {roomData && roomData.status === "finished" ? null : (
+            <BigButton
+              onPress={confirmEnterRoom}
+              style={{ backgroundColor: "#39B97C", width: 120, height: 35 }}
+              children={"Finalizar"}
+            />
+          )}
         </View>
         <View
           style={{
@@ -172,6 +216,8 @@ const EditRoom = () => {
                       kills={user.kills}
                       position={user.position}
                       timePlayed={user.timePlayed}
+                      refetch={refetch}
+                      crdBalance={user.crdBalance}
                     />
                   </View>
                 ))}

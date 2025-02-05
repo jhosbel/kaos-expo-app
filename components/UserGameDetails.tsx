@@ -3,17 +3,29 @@ import React, { useState } from "react";
 import { TextField } from "react-native-ui-lib";
 import SmallModalComponent from "./SmallModalComponent";
 import BigButton from "./BigButton";
-import { UPDATE_USER_STATS } from "@/graphql/mutations";
+import { UPDATE_USER, UPDATE_USER_STATS } from "@/graphql/mutations";
 import { useMutation } from "@apollo/client";
 
-const UserGameDetails = ({ name, userId, idRoom, position, kills, timePlayed }: any) => {
+const UserGameDetails = ({
+  name,
+  userId,
+  idRoom,
+  position,
+  kills,
+  timePlayed,
+  refetch,
+  crdBalance,
+}: any) => {
+  const [updateUser] = useMutation(UPDATE_USER);
   const [showUser, setShowUser] = useState(false);
   const [stats, setStats] = useState({
     userId: Number(userId),
-    kills: 0,
-    timePlayed: "",
-    position: 0,
+    kills,
+    timePlayed,
+    position,
   });
+
+  console.log("Muertes: ", crdBalance);
 
   const [updateUserStats] = useMutation(UPDATE_USER_STATS, {
     update(cache, { data: { updateUserStats } }) {
@@ -40,19 +52,20 @@ const UserGameDetails = ({ name, userId, idRoom, position, kills, timePlayed }: 
 
   const handleUpdate = async () => {
     try {
-      console.log("Enviando variables:", {
-        roomId: Number(idRoom),
-        stats,
-      });
-
-      const resp = await updateUserStats({
+      let sum = crdBalance + stats.kills;
+      await updateUser({
         variables: {
-          roomId: Number(idRoom),
-          stats: [stats], // stats debe ser un objeto único
+          updateUserInput: { id: userId, crdBalance: sum },
         },
       });
+      await updateUserStats({
+        variables: {
+          roomId: Number(idRoom),
+          stats: [stats],
+        },
+      });
+      refetch();
       setShowUser(false);
-      console.log("Mutación exitosa:", resp.data);
     } catch (error) {
       setShowUser(true);
       console.error(
@@ -122,7 +135,7 @@ const UserGameDetails = ({ name, userId, idRoom, position, kills, timePlayed }: 
             <TextField
               keyboardType={"number-pad"}
               placeholder={"15"}
-              value={stats.kills?.toString()}
+              value={stats.kills}
               onChangeText={(text) => handleInputChange("kills", text)}
               style={{
                 width: 60,

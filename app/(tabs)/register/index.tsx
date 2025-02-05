@@ -70,6 +70,10 @@ const register = () => {
           }),
         }
       );
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`${errorData.message}`);
+      }
       const data = await response.json();
       console.log("Datos del registro: ", data);
       if (data) {
@@ -83,7 +87,12 @@ const register = () => {
         Alert.alert("Error general", data.message);
       }
     } catch (error) {
-      console.log("Error al registrarse", error);
+      if (error instanceof Error) {
+        Alert.alert("Error", error.message || "Ocurrió un error inesperado.", [
+          { text: "Aceptar" },
+        ]);
+        console.log("Error al registrarse", error);
+      }
     }
   };
 

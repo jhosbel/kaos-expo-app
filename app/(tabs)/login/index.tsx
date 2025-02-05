@@ -10,7 +10,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "@/context/AuthContext";
 
 export default function login() {
-  const {setDataUser, setToken} = useAuth()
+  const { setDataUser, setToken } = useAuth();
   const router = useRouter();
 
   const [showPassword, setShowPassword] = useState(true);
@@ -27,21 +27,25 @@ export default function login() {
       return;
     }
     try {
-      const response = await fetch(`${process.env.EXPO_PUBLIC_BACKEND_URL}/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json; charset=utf-8",
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
-      });
+      const response = await fetch(
+        `${process.env.EXPO_PUBLIC_BACKEND_URL}/auth/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json; charset=utf-8",
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+          }),
+        }
+      );
       if (!response.ok) {
-        throw new Error(`Error: ${response.status} ${response.statusText}`);
+        const errorData = await response.json();
+        throw new Error(`${errorData.message}`);
       }
       const data = await response.json();
-      console.log(data)
+      console.log(data);
       if (data.status === "FIELD_ERROR") {
         Alert.alert(
           "Error de validación",
@@ -59,14 +63,18 @@ export default function login() {
         return;
       } else {
         console.log("Respuesta de la API:", data.email);
-        setDataUser(data.email)
-        setToken(data.token)
-        //console.log("Tokern: ", accessToken)
+        setDataUser(data.email);
+        setToken(data.token);
         router.navigate("/screens/main/main");
         return data;
       }
     } catch (error) {
-      console.log("Error al hacer login: ", error);
+      if (error instanceof Error) {
+        Alert.alert("Error", error.message || "Ocurrió un error inesperado.", [
+          { text: "Aceptar" },
+        ]);
+        console.log("Error al hacer login: ", error.message);
+      }
     }
   };
 

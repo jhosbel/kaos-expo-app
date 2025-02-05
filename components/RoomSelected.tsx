@@ -44,12 +44,14 @@ const RoomSelected = ({ date, time, mode, players, roomId, gameId }: any) => {
     }
     try {
       let pay = data?.userByEmail?.crdBalance - 1.5;
+      if (pay < 0) {
+        return Alert.alert("No tienes suficientes fondos.");
+      }
       await updateUser({
         variables: {
           updateUserInput: { id: data?.userByEmail?.id, crdBalance: pay },
         },
       });
-      console.log({roomId: roomId, userId: data?.userByEmail?.id, gameId: Number(gameId)})
       await addUserToRoom({
         variables: {
           roomId: roomId,
@@ -61,8 +63,7 @@ const RoomSelected = ({ date, time, mode, players, roomId, gameId }: any) => {
       router.replace("/screens/main/waitingRoom")
     } catch (error) {
       if (error instanceof Error) {
-        //console.error("Error al agregarse a la sala:", error.message);
-        if(error.message === "User not have the game") Alert.alert('No tienes el juego agregado correspondiente a esta sala!')
+        Alert.alert(error.message)
       }
     }
   };
@@ -92,7 +93,7 @@ const RoomSelected = ({ date, time, mode, players, roomId, gameId }: any) => {
       <SmallModalComponent
         isVisible={sure}
         setIsVisible={setSure}
-        containerStyles={{ height: 185 }}
+        containerStyles={{ height: 190 }}
       >
         <View
           style={{ justifyContent: "center", alignItems: "center", gap: 10 }}

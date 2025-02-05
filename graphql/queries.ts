@@ -20,6 +20,7 @@ export const GET_ALL_ROOMS = gql`
         position
         gameUserId
         nickname
+        crdBalance
       }
     }
   }
@@ -45,6 +46,7 @@ export const GET_ROOM_BY_ID = gql`
         position
         gameUserId
         nickname
+        crdBalance
       }
     }
   }

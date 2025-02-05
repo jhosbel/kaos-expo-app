@@ -13,7 +13,7 @@ const NavBar = () => {
   const { dataUser } = useAuth();
   const { data, loading, error } = useQuery(GET_USER_BY_EMAIL, {
     variables: { email: dataUser },
-    //fetchPolicy: "no-cache",
+    fetchPolicy: "no-cache",
   });
   const navigation = useNavigation();
 

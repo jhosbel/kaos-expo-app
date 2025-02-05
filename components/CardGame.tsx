@@ -3,6 +3,7 @@ import React from "react";
 import { Image } from "expo-image";
 
 const CardGame = ({ onPress, cardImage, gameName, cardStyles }: any) => {
+
   return (
     <TouchableOpacity
       style={[
@@ -24,7 +25,7 @@ const CardGame = ({ onPress, cardImage, gameName, cardStyles }: any) => {
         }}
       >
         <Image
-          source={{uri: cardImage}}
+          source={{ uri: cardImage }}
           className="rounded-full object-fill"
           style={{
             width: 130,

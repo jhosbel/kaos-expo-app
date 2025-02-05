@@ -183,3 +183,20 @@ export const ADD_USER_TO_ROOM = gql`
     }
   }
 `;
+
+export const UPDATE_ROOM_STATUS_TO_FINISHED = gql`
+  mutation UpdateRoomStatusToFinished($id: Int!) {
+    updateRoomStatusToFinished(id: $id) {
+      id
+      gameId
+      gameName
+      roomGameId
+      roomPassword
+      playersNum
+      mode
+      time
+      date
+      status
+    }
+  }
+`;
