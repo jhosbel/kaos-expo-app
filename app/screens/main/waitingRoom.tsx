@@ -21,7 +21,7 @@ const WaitingRoom = () => {
       >
         <CardGame
           cardStyles={{ marginTop: 20 }}
-          cardImage={require("@/assets/images/CODMbile.png")}
+          //cardImage={require("@/assets/images/CODMbile.png")}
           gameName={"Call Of Duty Mobile"}
         />
         <Text style={{ color: "#6F6F6F", fontSize: 25, marginTop: 20 }}>
